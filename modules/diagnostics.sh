@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+quick_check() {
+  printf 'БЫСТРАЯ ПРОВЕРКА\n\n'
+  local svc use
+  svc=$(ssh_service_name)
+  systemctl is-active --quiet "$svc" 2>/dev/null && ok "SSH работает" || err "SSH не работает"
+  sshd -t 2>/dev/null && ok "Конфигурация SSH корректна" || err "Ошибка конфигурации SSH"
+  [[ $(ssh_port) != 22 ]] && ok "SSH-порт: $(ssh_port)" || warn "Используется стандартный SSH-порт 22"
+  [[ $(ssh_password_state) == отключён ]] && ok "Вход по SSH-паролю отключён" || warn "Вход по SSH-паролю разрешён"
+  has_authorized_key_for_login_user && ok "SSH-ключ для $(active_login_user) найден" || warn "SSH-ключ для $(active_login_user) не найден"
+  ufw_active && ok "UFW включён" || warn "UFW не включён"
+  systemctl is-active --quiet fail2ban 2>/dev/null && ok "Fail2ban работает" || warn "Fail2ban не работает"
+  getent ahosts github.com >/dev/null 2>&1 && ok "DNS работает" || err "DNS не отвечает"
+  curl -fsS --max-time 5 -o /dev/null https://github.com 2>/dev/null && ok "HTTPS-доступ в интернет работает" || warn "HTTPS-проверка github.com не прошла"
+  use=$(df -P / | awk 'NR==2{gsub("%","");print $5}')
+  (( use < 85 )) && ok "Корневой диск занят на ${use}%" || warn "Корневой диск занят на ${use}%"
+  [[ -f /var/run/reboot-required ]] && warn "Требуется перезагрузка" || ok "Перезагрузка не требуется"
+  local updates
+  updates=$(count_updates)
+  (( updates == 0 )) && ok "Нет ожидающих обновлений пакетов" || warn "Доступно обновлений: $updates"
+}
+
+full_check() {
+  quick_check
+  printf '\nСЛУЖБЫ С ОШИБКАМИ\n'
+  systemctl --failed --no-pager || true
+  printf '\nОТКРЫТЫЕ ПОРТЫ\n'
+  ss -lntup || true
+  printf '\nДИСКИ\n'
+  df -hT -x tmpfs -x devtmpfs || true
+  printf '\nПАМЯТЬ\n'
+  free -h || true
+  printf '\nПОСЛЕДНИЕ ОШИБКИ ЯДРА/СИСТЕМЫ\n'
+  journalctl -p 0..3 -n 40 --no-pager 2>/dev/null || true
+}
+
+safe_fix() {
+  printf 'БЕЗОПАСНЫЕ ИСПРАВЛЕНИЯ\n\n'
+  if command_exists ufw && ! ufw_active; then warn "UFW установлен, но выключен — автоматически включать его SERVER-KIT не будет."; fi
+  if command_exists fail2ban-client && ! systemctl is-active --quiet fail2ban; then
+    confirm "Fail2ban установлен, но не запущен. Запустить?" && systemctl enable --now fail2ban
+  fi
+  if [[ -f /var/run/reboot-required ]]; then warn "Требуется перезагрузка — автоматически она не выполняется."; fi
+  apt-get check >/dev/null 2>&1 && ok "APT: зависимости в порядке" || warn "APT сообщает о проблемах зависимостей"
+}
+
+diagnostics_menu() {
+  while true; do
+    header
+    cat <<'MENU'
+ДИАГНОСТИКА
+
+1. Быстрая проверка
+2. Полная проверка
+3. Исправить безопасные проблемы
+4. Проверить SSH
+5. Проверить DNS и HTTPS
+6. Показать открытые порты
+7. Показать службы с ошибками
+0. Назад
+MENU
+    printf '\n'; read -r -p 'Выберите действие: ' c
+    case $c in
+      1) quick_check; pause ;; 2) full_check; pause ;; 3) safe_fix; pause ;;
+      4) ssh_validate; systemctl status "$(ssh_service_name)" --no-pager; pause ;;
+      5) getent ahosts github.com | head; curl -I --max-time 8 https://github.com 2>/dev/null | head; pause ;;
+      6) ss -lntup; pause ;; 7) systemctl --failed --no-pager; pause ;; 0) return ;;
+    esac
+  done
+}
