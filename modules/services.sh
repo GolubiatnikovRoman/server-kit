@@ -8,24 +8,12 @@ ask_service() {
 }
 
 services_menu() {
+  local c
   while true; do
     header
-    cat <<'MENU'
-СЛУЖБЫ
-
-1. Активные службы
-2. Все службы
-3. Неудавшиеся службы
-4. Состояние службы
-5. Запустить службу
-6. Остановить службу
-7. Перезапустить службу
-8. Включить автозапуск
-9. Отключить автозапуск
-10. Логи службы
-0. Назад
-MENU
-    printf '\n'; read -r -p 'Выберите действие: ' c
+    box "Службы systemd"       "1. Активные службы"       "2. Все службы"       "3. Неудавшиеся службы"       ""       "4. Состояние службы"       "5. Запустить службу"       "6. Остановить службу"       "7. Перезапустить службу"       "8. Включить автозапуск"       "9. Отключить автозапуск"       "10. Логи службы"       "0. Назад"
+    printf '\n'
+    ask_num "Выбор [0-10]: "; c=$REPLY
     case $c in
       1) systemctl --type=service --state=running --no-pager; pause ;;
       2) systemctl list-units --type=service --all --no-pager; pause ;;
@@ -34,8 +22,10 @@ MENU
       5) n=$(ask_service) && confirm "Запустить $n?" && systemctl start "$n"; pause ;;
       6) n=$(ask_service) && confirm "Остановить $n?" && systemctl stop "$n"; pause ;;
       7) n=$(ask_service) && confirm "Перезапустить $n?" && systemctl restart "$n"; pause ;;
-      8) n=$(ask_service) && systemctl enable "$n"; pause ;; 9) n=$(ask_service) && confirm "Отключить автозапуск $n?" && systemctl disable "$n"; pause ;;
-      10) n=$(ask_service) && journalctl -u "$n" -n 150 --no-pager; pause ;; 0) return ;;
+      8) n=$(ask_service) && systemctl enable "$n"; pause ;;
+      9) n=$(ask_service) && confirm "Отключить автозапуск $n?" && systemctl disable "$n"; pause ;;
+      10) n=$(ask_service) && journalctl -u "$n" -n 150 --no-pager; pause ;;
+      0|"") return ;; *) echo "Нет такого пункта." ;;
     esac
   done
 }
