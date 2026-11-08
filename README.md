@@ -1,6 +1,6 @@
 <div align="center">
 
-<img alt="SERVER-KIT" src="manuals/assets/banner.svg" width="820">
+<img alt="SERVER-KIT" src="manuals/assets/banner-v2.svg" width="820">
 
 **Управление и базовая защита Linux-сервера одной командой**
 
@@ -24,7 +24,7 @@
 в одном меню. После установки достаточно команды `serverkit`.
 
 <div align="center">
-<img alt="Интерфейс SERVER-KIT" src="manuals/assets/script-preview.svg" width="760">
+<img alt="Интерфейс SERVER-KIT" src="manuals/assets/script-preview-v2.svg" width="760">
 </div>
 
 ## Возможности
