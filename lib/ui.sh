@@ -19,7 +19,14 @@ warn() { printf '%s!%s  %s\n' "$C_YELLOW" "$C_RESET" "$*" >&2; }
 err()  { printf '%s✗%s  %s\n' "$C_RED" "$C_RESET" "$*" >&2; }
 info() { printf '%s==>%s %s\n' "$C_CYAN" "$C_RESET" "$*"; }
 
-BOX_W=64
+TERM_COLS=$(tput cols 2>/dev/null || echo 80)
+if (( TERM_COLS >= 92 )); then
+  BOX_W=72
+else
+  BOX_W=58
+fi
+
+ui_wide() { (( TERM_COLS >= 92 )); }
 
 ui_repeat() {
   local ch=$1 n=$2 i
@@ -66,8 +73,14 @@ ui_line() {
 ui_blank() { ui_line ""; }
 
 ui_two() {
-  local left=$1 right=$2 half=$(( (BOX_W - 7) / 2 ))
-  printf '│  %s  %s│\n' "$(pad_right "$left" "$half")" "$(pad_right "$right" "$half")"
+  local left=$1 right=$2
+  if ui_wide; then
+    local half=$(( (BOX_W - 7) / 2 ))
+    printf '│  %s  %s│\n' "$(pad_right "$left" "$half")" "$(pad_right "$right" "$half")"
+  else
+    ui_line "$left"
+    [[ -n $right ]] && ui_line "$right"
+  fi
 }
 
 ui_status() {
