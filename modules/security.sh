@@ -60,7 +60,11 @@ security_menu() {
       ui_line "Fail2ban не установлен"
       ui_blank
       ui_line "[01] Установить и включить Fail2ban"
-      ui_line "[02] Автоматические security-обновления"
+      if ! security_updates_enabled; then
+        ui_line "[02] Включить security-обновления"
+      else
+        ui_line "Security updates: включены"
+      fi
       ui_line "[03] Базовая проверка безопасности"
       ui_line "[00] Назад"
       ui_bottom
@@ -68,7 +72,7 @@ security_menu() {
       ask_num "security › "; c=$REPLY
       case $c in
         1|01) install_fail2ban; pause ;;
-        2|02) enable_unattended_upgrades; pause ;;
+        2|02) if security_updates_enabled; then echo "Нет такого пункта."; else enable_unattended_upgrades; pause; fi ;;
         3|03) security_basic_audit; pause ;;
         0|00|"") return ;;
         *) echo "Нет такого пункта." ;;
