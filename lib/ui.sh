@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# Стабильная UTF-8 ширина для рамок и русского текста.
+if locale -a 2>/dev/null | grep -qi '^C\.UTF-8$'; then
+  export LC_ALL=C.UTF-8
+elif locale -a 2>/dev/null | grep -qi '^C\.utf8$'; then
+  export LC_ALL=C.utf8
+fi
+
 if [[ -t 1 ]]; then
   C_GREEN=$'\e[32m'; C_YELLOW=$'\e[33m'; C_RED=$'\e[31m'; C_CYAN=$'\e[36m'
   C_BOLD=$'\e[1m'; C_DIM=$'\e[2m'; C_RESET=$'\e[0m'
@@ -12,16 +19,12 @@ warn() { printf '%s!%s  %s\n' "$C_YELLOW" "$C_RESET" "$*" >&2; }
 err()  { printf '%s✗%s  %s\n' "$C_RED" "$C_RESET" "$*" >&2; }
 info() { printf '%s==>%s %s\n' "$C_CYAN" "$C_RESET" "$*"; }
 
-BOX_W=52
+BOX_W=64
 
-box_rule() {
-  local i
-  for ((i=0; i<BOX_W; i++)); do printf '─'; done
+ui_repeat() {
+  local ch=$1 n=$2 i
+  for ((i=0; i<n; i++)); do printf '%s' "$ch"; done
 }
-
-box_top() { printf '╔'; box_rule; printf '╗\n'; }
-box_bottom() { printf '╚'; box_rule; printf '╝\n'; }
-box_sep() { printf '│'; box_rule; printf '│\n'; }
 
 pad_right() {
   local text=$1 width=$2 n
@@ -30,9 +33,59 @@ pad_right() {
   printf '%s%*s' "$text" "$n" ''
 }
 
-box_line() {
-  printf '│  %s│\n' "$(pad_right "$1" $((BOX_W - 2)))"
+ui_top() {
+  printf '╭─ %s%s%s ' "$C_BOLD" "$1" "$C_RESET"
+  local used=$(( ${#1} + 4 ))
+  ui_repeat '─' $((BOX_W - used - ${#2} - 3))
+  printf ' %s%s%s ─╮\n' "$C_DIM" "$2" "$C_RESET"
 }
+
+ui_bottom() {
+  printf '╰'
+  ui_repeat '─' $((BOX_W - 2))
+  printf '╯\n'
+}
+
+ui_sep() {
+  printf '├'
+  ui_repeat '─' $((BOX_W - 2))
+  printf '┤\n'
+}
+
+ui_section() {
+  local title=$1
+  printf '├─ %s%s%s ' "$C_CYAN" "$title" "$C_RESET"
+  ui_repeat '─' $((BOX_W - ${#title} - 5))
+  printf '┤\n'
+}
+
+ui_line() {
+  printf '│  %s│\n' "$(pad_right "$1" $((BOX_W - 3)))"
+}
+
+ui_blank() { ui_line ""; }
+
+ui_two() {
+  local left=$1 right=$2 half=$(( (BOX_W - 7) / 2 ))
+  printf '│  %s  %s│\n' "$(pad_right "$left" "$half")" "$(pad_right "$right" "$half")"
+}
+
+ui_status() {
+  local label=$1 state=$2 kind=${3:-ok} color
+  case $kind in
+    ok) color=$C_GREEN ;;
+    warn) color=$C_YELLOW ;;
+    bad) color=$C_RED ;;
+    *) color=$C_DIM ;;
+  esac
+  printf '%s  ● %s%s%s' "$label" "$color" "$state" "$C_RESET"
+}
+
+box_rule() { ui_repeat '─' "$BOX_W"; }
+box_top() { printf '╔'; box_rule; printf '╗\n'; }
+box_bottom() { printf '╚'; box_rule; printf '╝\n'; }
+box_sep() { printf '│'; box_rule; printf '│\n'; }
+box_line() { printf '│  %s│\n' "$(pad_right "$1" $((BOX_W - 2)))"; }
 
 box() {
   local title=$1 line
@@ -46,9 +99,7 @@ box() {
   box_bottom
 }
 
-header() {
-  clear 2>/dev/null || true
-}
+header() { clear 2>/dev/null || true; }
 
 pause() {
   printf '\n%sEnter – в меню%s ' "$C_DIM" "$C_RESET"
