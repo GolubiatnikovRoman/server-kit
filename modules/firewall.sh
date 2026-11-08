@@ -52,19 +52,59 @@ firewall_menu() {
   local c state
   while true; do
     header
-    if ufw_active; then state="включён"; elif ufw_installed; then state="выключен"; else state="не установлен"; fi
-    box "Межсетевой экран · UFW: $state"       "1. Установить UFW"       "2. Включить UFW безопасно"       "3. Отключить UFW"       ""       "4. Открыть порт"       "5. Закрыть порт"       "6. Разрешить IP/подсеть"       ""       "7. Показать правила с номерами"       "8. Удалить правило по номеру"       "0. Назад"
+
+    if ! ufw_installed; then
+      ui_top "FIREWALL" "UFW"
+      ui_blank
+      ui_line "UFW не установлен"
+      ui_blank
+      ui_line "[01] Установить UFW"
+      ui_line "[00] Назад"
+      ui_bottom
+      printf '\n'
+      ask_num "firewall › "; c=$REPLY
+      case $c in
+        1|01) firewall_install; pause ;;
+        0|00|"") return ;;
+        *) echo "Нет такого пункта." ;;
+      esac
+      continue
+    fi
+
+    ufw_active && state="ACTIVE" || state="OFF"
+    ui_top "FIREWALL" "$state"
+    ui_blank
+    ui_line "Текущий SSH-порт: $(ssh_port)/tcp"
+    ui_blank
+    if ufw_active; then
+      ui_line "[01] Отключить UFW"
+    else
+      ui_line "[01] Включить UFW безопасно"
+    fi
+    ui_line "[02] Открыть порт"
+    ui_line "[03] Закрыть порт"
+    ui_line "[04] Разрешить IP/подсеть"
+    ui_blank
+    ui_line "[05] Показать правила"
+    ui_line "[06] Удалить правило по номеру"
+    ui_line "[00] Назад"
+    ui_bottom
+
     printf '\n'
-    ask_num "Выбор [0-8]: "; c=$REPLY
+    ask_num "firewall › "; c=$REPLY
     case $c in
-      1) firewall_install; pause ;; 2) firewall_enable; pause ;;
-      3) ufw_installed && confirm "Отключить UFW?" && ufw disable; pause ;;
-      4) ufw_installed && firewall_open_port || err "UFW не установлен"; pause ;;
-      5) ufw_installed && firewall_close_port || err "UFW не установлен"; pause ;;
-      6) ufw_installed && firewall_allow_ip || err "UFW не установлен"; pause ;;
-      7) ufw_installed && ufw status numbered; pause ;;
-      8) if ufw_installed; then read -r -p 'Номер правила: ' n; [[ $n =~ ^[0-9]+$ ]] && confirm "Удалить правило №$n?" && ufw --force delete "$n"; fi; pause ;;
-      0|"") return ;; *) echo "Нет такого пункта." ;;
+      1|01)
+        if ufw_active; then confirm "Отключить UFW?" && ufw disable
+        else firewall_enable
+        fi
+        pause ;;
+      2|02) firewall_open_port; pause ;;
+      3|03) firewall_close_port; pause ;;
+      4|04) firewall_allow_ip; pause ;;
+      5|05) ufw status numbered; pause ;;
+      6|06) read -r -p 'Номер правила: ' n; [[ $n =~ ^[0-9]+$ ]] && confirm "Удалить правило №$n?" && ufw --force delete "$n"; pause ;;
+      0|00|"") return ;;
+      *) echo "Нет такого пункта." ;;
     esac
   done
 }
