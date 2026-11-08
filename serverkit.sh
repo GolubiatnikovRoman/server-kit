@@ -34,7 +34,9 @@ main_dashboard() {
   fi
 
   if ufw_active; then
-    ufw_state="ACTIVE"; ufw_kind=ok
+    if ufw_ssh_allowed; then ufw_state="ACTIVE"; ufw_kind=ok
+    else ufw_state="SSH RULE MISSING"; ufw_kind=warn
+    fi
   elif ufw_installed; then
     ufw_state="OFF"; ufw_kind=warn
   else
@@ -42,18 +44,20 @@ main_dashboard() {
   fi
 
   if command_exists fail2ban-client; then
-    if systemctl is-active --quiet fail2ban 2>/dev/null; then f2b_state="ACTIVE"; f2b_kind=ok
-    else f2b_state="STOPPED"; f2b_kind=warn; fi
+    if fail2ban_ssh_protected; then f2b_state="SSH PROTECTED"; f2b_kind=ok
+    elif systemctl is-active --quiet fail2ban 2>/dev/null; then f2b_state="SSH JAIL MISSING"; f2b_kind=warn
+    else f2b_state="STOPPED"; f2b_kind=warn
+    fi
   else
     f2b_state="NOT INSTALLED"; f2b_kind=dim
   fi
 
-  if command_exists docker; then
-    if systemctl is-active --quiet docker 2>/dev/null; then docker_state="RUNNING"; docker_kind=ok
-    else docker_state="STOPPED"; docker_kind=warn; fi
-  else
-    docker_state="NOT INSTALLED"; docker_kind=dim
-  fi
+  case "$(docker_runtime_state)" in
+    RUNNING) docker_state="RUNNING"; docker_kind=ok ;;
+    STOPPED) docker_state="STOPPED"; docker_kind=warn ;;
+    ERROR) docker_state="ERROR"; docker_kind=bad ;;
+    *) docker_state="NOT INSTALLED"; docker_kind=dim ;;
+  esac
 
   updates=$(count_updates 2>/dev/null || echo "?")
   if [[ $updates =~ ^[0-9]+$ ]] && (( updates > 0 )); then update_kind=warn; else update_kind=ok; fi
