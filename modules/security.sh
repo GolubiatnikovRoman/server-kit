@@ -39,28 +39,20 @@ security_basic_audit() {
 }
 
 security_menu() {
+  local c f2b
   while true; do
-    header; printf 'БЕЗОПАСНОСТЬ\n\n'
-    systemctl is-active --quiet fail2ban 2>/dev/null && ok "Fail2ban работает" || warn "Fail2ban не работает"
-    cat <<'MENU'
-
-1. Установить и включить Fail2ban
-2. Статус Fail2ban
-3. Статус защиты SSH в Fail2ban
-4. Разблокировать IP в SSH jail
-5. Последние неудачные SSH-входы
-6. Включить автоматические security-обновления
-7. Базовая проверка безопасности
-0. Назад
-MENU
-    printf '\n'; read -r -p 'Выберите действие: ' c
+    header
+    systemctl is-active --quiet fail2ban 2>/dev/null && f2b="работает" || f2b="не работает"
+    box "Безопасность · Fail2ban: $f2b"       "1. Установить и включить Fail2ban"       "2. Статус Fail2ban"       "3. Статус защиты SSH"       "4. Разблокировать IP"       "5. Последние неудачные SSH-входы"       ""       "6. Автоматические security-обновления"       "7. Базовая проверка безопасности"       "0. Назад"
+    printf '\n'
+    ask_num "Выбор [0-7]: "; c=$REPLY
     case $c in
       1) install_fail2ban; pause ;;
       2) fail2ban-client status 2>/dev/null || err "Fail2ban недоступен"; pause ;;
       3) fail2ban-client status sshd 2>/dev/null || err "Jail sshd недоступен"; pause ;;
       4) read -r -p 'IP-адрес: ' ip; safe_name "$ip" && fail2ban-client set sshd unbanip "$ip" 2>/dev/null || err "Не удалось разблокировать IP"; pause ;;
       5) journalctl -u ssh -u sshd --since '-24 hours' --no-pager 2>/dev/null | grep -Ei 'failed|invalid user|authentication failure' | tail -100 || true; pause ;;
-      6) enable_unattended_upgrades; pause ;; 7) security_basic_audit; pause ;; 0) return ;;
+      6) enable_unattended_upgrades; pause ;; 7) security_basic_audit; pause ;; 0|"") return ;; *) echo "Нет такого пункта." ;;
     esac
   done
 }
