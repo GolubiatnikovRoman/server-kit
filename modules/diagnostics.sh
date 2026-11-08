@@ -46,26 +46,17 @@ safe_fix() {
 }
 
 diagnostics_menu() {
+  local c
   while true; do
     header
-    cat <<'MENU'
-ДИАГНОСТИКА
-
-1. Быстрая проверка
-2. Полная проверка
-3. Исправить безопасные проблемы
-4. Проверить SSH
-5. Проверить DNS и HTTPS
-6. Показать открытые порты
-7. Показать службы с ошибками
-0. Назад
-MENU
-    printf '\n'; read -r -p 'Выберите действие: ' c
+    box "Диагностика"       "1. Быстрая проверка"       "2. Полная проверка"       "3. Исправить безопасные проблемы"       ""       "4. Проверить SSH"       "5. Проверить DNS и HTTPS"       "6. Показать открытые порты"       "7. Показать службы с ошибками"       "0. Назад"
+    printf '\n'
+    ask_num "Выбор [0-7]: "; c=$REPLY
     case $c in
       1) quick_check; pause ;; 2) full_check; pause ;; 3) safe_fix; pause ;;
       4) ssh_validate; systemctl status "$(ssh_service_name)" --no-pager; pause ;;
       5) getent ahosts github.com | head; curl -I --max-time 8 https://github.com 2>/dev/null | head; pause ;;
-      6) ss -lntup; pause ;; 7) systemctl --failed --no-pager; pause ;; 0) return ;;
+      6) ss -lntup; pause ;; 7) systemctl --failed --no-pager; pause ;; 0|"") return ;; *) echo "Нет такого пункта." ;;
     esac
   done
 }
