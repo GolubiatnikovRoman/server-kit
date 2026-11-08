@@ -3,6 +3,13 @@
 ufw_installed() { command_exists ufw; }
 ufw_active() { ufw_installed && ufw status 2>/dev/null | grep -q '^Status: active'; }
 
+ufw_ssh_allowed() {
+  ufw_active || return 1
+  local p
+  p=$(ssh_port)
+  ufw status 2>/dev/null | grep -Eq "^[[:space:]]*${p}/tcp([[:space:]]|$).*ALLOW"
+}
+
 firewall_install() {
   ufw_installed && { warn "UFW уже установлен"; return; }
   confirm "Установить UFW?" || return
@@ -75,6 +82,11 @@ firewall_menu() {
     ui_top "FIREWALL" "$state"
     ui_blank
     ui_line "Текущий SSH-порт: $(ssh_port)/tcp"
+    if ufw_active; then
+      if ufw_ssh_allowed; then ui_line "SSH в UFW: разрешён"
+      else ui_line "SSH в UFW: ВНИМАНИЕ — правило не найдено"
+      fi
+    fi
     ui_blank
     if ufw_active; then
       ui_line "[01] Отключить UFW"
