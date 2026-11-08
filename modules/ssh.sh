@@ -227,17 +227,60 @@ ssh_set_root_login() {
 }
 
 ssh_menu() {
-  local c
+  local c pass pending root key_state
   while true; do
     header
-    box "SSH"       "Порт: $(ssh_port)"       "Пароль: $(ssh_password_state)"       "PermitRootLogin: $(ssh_root_state)"       ""       "1. Начать безопасную смену SSH-порта"       "2. Завершить смену SSH-порта"       "3. Отменить незавершённую смену порта"       ""       "4. Отключить вход по паролю"       "5. Настроить вход root"       ""       "6. Проверить конфигурацию"       "7. Показать эффективную конфигурацию"       "8. Восстановить последнюю резервную копию"       "0. Назад"
+    pass=$(ssh_password_state)
+    root=$(ssh_root_state)
+    [[ -f $SSH_PENDING ]] && pending=yes || pending=no
+    has_authorized_key_for_login_user && key_state="найден" || key_state="не найден"
+
+    ui_top "SSH" "port $(ssh_port)"
+    ui_blank
+    ui_two "Password auth: $pass" "SSH key: $key_state"
+    ui_two "Root login: $root" "Config: $(sshd -t 2>/dev/null && echo OK || echo ERROR)"
+    ui_blank
+    ui_section "ACTIONS"
+    ui_blank
+    if [[ $pending == yes ]]; then
+      ui_line "[01] Завершить смену SSH-порта"
+      ui_line "[02] Отменить смену SSH-порта"
+    else
+      ui_line "[01] Сменить SSH-порт"
+    fi
+    if [[ $pass != отключён ]]; then
+      ui_line "[03] Отключить вход по паролю"
+    fi
+    ui_line "[04] Настроить вход root"
+    ui_blank
+    ui_line "[05] Проверить конфигурацию"
+    ui_line "[06] Показать эффективные настройки"
+    ui_line "[07] Восстановить последнюю резервную копию"
+    ui_line "[00] Назад"
+    ui_bottom
+
     printf '\n'
-    ask_num "Выбор [0-8]: "; c=$REPLY
+    ask_num "ssh › "; c=$REPLY
     case $c in
-      1) ssh_change_port_begin; pause ;; 2) ssh_change_port_finish; pause ;; 3) ssh_change_port_cancel; pause ;;
-      4) confirm "Отключить вход по SSH-паролю?" && ssh_disable_password; pause ;;
-      5) ssh_set_root_login; pause ;; 6) ssh_validate; pause ;; 7) sshd -T 2>/dev/null | less ;;
-      8) ssh_restore_latest; pause ;; 0|"") return ;; *) echo "Нет такого пункта." ;;
+      1|01)
+        if [[ $pending == yes ]]; then ssh_change_port_finish
+        else ssh_change_port_begin
+        fi
+        pause ;;
+      2|02)
+        if [[ $pending == yes ]]; then ssh_change_port_cancel; pause
+        else echo "Нет такого пункта."
+        fi ;;
+      3|03)
+        if [[ $pass != отключён ]]; then confirm "Отключить вход по SSH-паролю?" && ssh_disable_password; pause
+        else echo "Нет такого пункта."
+        fi ;;
+      4|04) ssh_set_root_login; pause ;;
+      5|05) ssh_validate; pause ;;
+      6|06) sshd -T 2>/dev/null | less ;;
+      7|07) ssh_restore_latest; pause ;;
+      0|00|"") return ;;
+      *) echo "Нет такого пункта." ;;
     esac
   done
 }
