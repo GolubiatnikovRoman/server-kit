@@ -31,13 +31,37 @@ console_menu() {
   local c
   while true; do
     header
-    box "Оформление консоли"       "1. Установить/обновить MOTD SERVER-KIT"       "2. Предпросмотр MOTD"       "3. Отключить MOTD SERVER-KIT"       "0. Назад"
-    printf '\n'
-    ask_num "Выбор [0-3]: "; c=$REPLY
-    case $c in
-      1) install_serverkit_motd; pause ;; 2) preview_motd; pause ;;
-      3) confirm "Удалить только MOTD SERVER-KIT?" && rm -f "$MOTD_FILE" && ok "MOTD SERVER-KIT удалён"; pause ;;
-      0|"") return ;; *) echo "Нет такого пункта." ;;
-    esac
+
+    if [[ -x $MOTD_FILE ]]; then
+      ui_top "CONSOLE" "MOTD active"
+      ui_blank
+      ui_line "[01] Обновить MOTD SERVER-KIT"
+      ui_line "[02] Предпросмотр MOTD"
+      ui_line "[03] Отключить MOTD SERVER-KIT"
+      ui_line "[00] Назад"
+      ui_bottom
+      printf '\n'
+      ask_num "console › "; c=$REPLY
+      case $c in
+        1|01) install_serverkit_motd; pause ;;
+        2|02) preview_motd; pause ;;
+        3|03) confirm "Удалить только MOTD SERVER-KIT?" && rm -f "$MOTD_FILE" && ok "MOTD SERVER-KIT удалён"; pause ;;
+        0|00|"") return ;;
+        *) echo "Нет такого пункта." ;;
+      esac
+    else
+      ui_top "CONSOLE" "MOTD disabled"
+      ui_blank
+      ui_line "[01] Установить MOTD SERVER-KIT"
+      ui_line "[00] Назад"
+      ui_bottom
+      printf '\n'
+      ask_num "console › "; c=$REPLY
+      case $c in
+        1|01) install_serverkit_motd; pause ;;
+        0|00|"") return ;;
+        *) echo "Нет такого пункта." ;;
+      esac
+    fi
   done
 }
