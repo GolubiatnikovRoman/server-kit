@@ -1,17 +1,19 @@
-<div align="center">
+<p align="center">
+  <img src="manuals/assets/banner-v3.svg" alt="SERVER-KIT" width="900">
+</p>
 
-<img alt="SERVER-KIT" src="manuals/assets/banner-v2.svg" width="820">
+<p align="center">
+  <strong>Управление и базовая защита Linux-сервера одной командой</strong>
+</p>
 
-**Управление и базовая защита Linux-сервера одной командой**
-
-[![Версия](https://img.shields.io/badge/SERVER--KIT-v1.0.0-93E06F?labelColor=221B17)](https://github.com/GolubiatnikovRoman/server-kit)
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-supported-93E06F?labelColor=221B17)](https://ubuntu.com/)
-[![Debian](https://img.shields.io/badge/Debian-supported-93E06F?labelColor=221B17)](https://www.debian.org/)
-[![Звёзды](https://img.shields.io/github/stars/GolubiatnikovRoman/server-kit?label=звёзды&style=flat&color=93E06F&labelColor=221B17)](https://github.com/GolubiatnikovRoman/server-kit/stargazers)
-[![Обновлено](https://img.shields.io/github/last-commit/GolubiatnikovRoman/server-kit?label=обновлено&color=93E06F&labelColor=221B17)](https://github.com/GolubiatnikovRoman/server-kit/commits)
-[![License](https://img.shields.io/badge/license-MIT-93E06F?labelColor=221B17)](LICENSE)
-
-</div>
+<p align="center">
+  <a href="https://github.com/GolubiatnikovRoman/server-kit"><img src="https://img.shields.io/badge/SERVER--KIT-v1.0.0-93E06F?labelColor=221B17" alt="Версия"></a>
+  <a href="https://ubuntu.com/"><img src="https://img.shields.io/badge/Ubuntu-supported-93E06F?labelColor=221B17" alt="Ubuntu"></a>
+  <a href="https://www.debian.org/"><img src="https://img.shields.io/badge/Debian-supported-93E06F?labelColor=221B17" alt="Debian"></a>
+  <a href="https://github.com/GolubiatnikovRoman/server-kit/stargazers"><img src="https://img.shields.io/github/stars/GolubiatnikovRoman/server-kit?label=звёзды&style=flat&color=93E06F&labelColor=221B17" alt="Stars"></a>
+  <a href="https://github.com/GolubiatnikovRoman/server-kit/commits"><img src="https://img.shields.io/github/last-commit/GolubiatnikovRoman/server-kit?label=обновлено&color=93E06F&labelColor=221B17" alt="Updated"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-93E06F?labelColor=221B17" alt="License"></a>
+</p>
 
 ---
 
@@ -23,9 +25,9 @@
 Он объединяет настройку SSH, UFW, Fail2ban, Docker, Screen, мониторинг, резервные копии и диагностику
 в одном меню. После установки достаточно команды `serverkit`.
 
-<div align="center">
-<img alt="Интерфейс SERVER-KIT" src="manuals/assets/script-preview-v2.svg" width="760">
-</div>
+<p align="center">
+  <img src="manuals/assets/script-preview-v3.svg" alt="Интерфейс SERVER-KIT" width="900">
+</p>
 
 ## Возможности
 
