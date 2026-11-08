@@ -1,10 +1,66 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="420" viewBox="0 0 1640 420">
-  <rect width="1640" height="420" rx="34" fill="#221B17"/>
-  <rect x="28" y="28" width="1584" height="364" rx="26" fill="none" stroke="#3A312B" stroke-width="2"/>
-  <circle cx="92" cy="84" r="9" fill="#93E06F"/>
-  <circle cx="124" cy="84" r="9" fill="#6D5B50"/>
-  <circle cx="156" cy="84" r="9" fill="#6D5B50"/>
-  <text x="820" y="190" text-anchor="middle" fill="#F5F1ED" font-family="Arial,Helvetica,sans-serif" font-size="78" font-weight="700" letter-spacing="6">SERVER-KIT</text>
-  <text x="820" y="258" text-anchor="middle" fill="#93E06F" font-family="Arial,Helvetica,sans-serif" font-size="30" font-weight="600">УПРАВЛЕНИЕ И БАЗОВАЯ ЗАЩИТА LINUX-СЕРВЕРА</text>
-  <text x="820" y="314" text-anchor="middle" fill="#B9ADA4" font-family="Arial,Helvetica,sans-serif" font-size="24">SSH · UFW · Fail2ban · Docker · Monitoring · Backup</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="440" viewBox="0 0 1640 440">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B0F14"/>
+      <stop offset="100%" stop-color="#111820"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7EE787"/>
+      <stop offset="100%" stop-color="#4CC38A"/>
+    </linearGradient>
+    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M 44 0 L 0 0 0 44" fill="none" stroke="#1C2631" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1640" height="440" rx="30" fill="url(#bg)"/>
+  <rect width="1640" height="440" rx="30" fill="url(#grid)" opacity="0.45"/>
+
+  <rect x="54" y="52" width="10" height="336" rx="5" fill="url(#accent)"/>
+
+  <g transform="translate(118 84)">
+    <text x="0" y="78" fill="#F4F7FA" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="84" font-weight="800" letter-spacing="5">SERVER-KIT</text>
+    <text x="2" y="135" fill="#A9B4C0" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="28" font-weight="500">
+      Управление и базовая защита Linux-сервера
+    </text>
+
+    <g transform="translate(0 195)">
+      <rect x="0" y="0" width="140" height="42" rx="21" fill="#15221A" stroke="#2B6F48"/>
+      <text x="70" y="28" text-anchor="middle" fill="#8FE3A3" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">SSH</text>
+
+      <rect x="158" y="0" width="140" height="42" rx="21" fill="#15221A" stroke="#2B6F48"/>
+      <text x="228" y="28" text-anchor="middle" fill="#8FE3A3" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">UFW</text>
+
+      <rect x="316" y="0" width="160" height="42" rx="21" fill="#15221A" stroke="#2B6F48"/>
+      <text x="396" y="28" text-anchor="middle" fill="#8FE3A3" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">Fail2ban</text>
+
+      <rect x="494" y="0" width="160" height="42" rx="21" fill="#15221A" stroke="#2B6F48"/>
+      <text x="574" y="28" text-anchor="middle" fill="#8FE3A3" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">Docker</text>
+
+      <rect x="672" y="0" width="200" height="42" rx="21" fill="#15221A" stroke="#2B6F48"/>
+      <text x="772" y="28" text-anchor="middle" fill="#8FE3A3" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">Monitoring</text>
+    </g>
+
+    <text x="2" y="300" fill="#697786" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="20" letter-spacing="1.4">
+      ONE MENU • SAFE CHANGES • BACKUP &amp; ROLLBACK
+    </text>
+  </g>
+
+  <g transform="translate(1190 92)">
+    <rect x="0" y="0" width="342" height="258" rx="24" fill="#0E141B" stroke="#24303B" stroke-width="2"/>
+    <rect x="28" y="28" width="286" height="54" rx="12" fill="#121B24"/>
+    <circle cx="58" cy="55" r="8" fill="#61D37D"/>
+    <text x="78" y="62" fill="#D8E0E8" font-family="monospace" font-size="18">serverkit</text>
+
+    <text x="28" y="126" fill="#7EE787" font-family="monospace" font-size="18">✓</text>
+    <text x="55" y="126" fill="#C6D0DB" font-family="monospace" font-size="17">SSH protected</text>
+
+    <text x="28" y="162" fill="#7EE787" font-family="monospace" font-size="18">✓</text>
+    <text x="55" y="162" fill="#C6D0DB" font-family="monospace" font-size="17">Firewall active</text>
+
+    <text x="28" y="198" fill="#7EE787" font-family="monospace" font-size="18">✓</text>
+    <text x="55" y="198" fill="#C6D0DB" font-family="monospace" font-size="17">Backup ready</text>
+
+    <rect x="28" y="222" width="286" height="2" fill="#1D2833"/>
+  </g>
 </svg>
