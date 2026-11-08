@@ -38,28 +38,17 @@ delete_backup() {
 }
 
 backup_menu() {
+  local c
   while true; do
     header
-    cat <<'MENU'
-РЕЗЕРВНЫЕ КОПИИ
-
-1. Создать полную копию настроек SERVER-KIT
-2. Создать копию SSH
-3. Создать копию UFW
-4. Создать копию Fail2ban
-5. Показать резервные копии
-6. Восстановить последнюю копию SSH
-7. Восстановить последнюю копию UFW
-8. Восстановить последнюю копию Fail2ban
-9. Удалить выбранную копию
-0. Назад
-MENU
-    printf '\n'; read -r -p 'Выберите действие: ' c
+    box "Резервные копии"       "1. Создать полную копию настроек SERVER-KIT"       "2. Создать копию SSH"       "3. Создать копию UFW"       "4. Создать копию Fail2ban"       ""       "5. Показать резервные копии"       ""       "6. Восстановить последнюю копию SSH"       "7. Восстановить последнюю копию UFW"       "8. Восстановить последнюю копию Fail2ban"       "9. Удалить выбранную копию"       "0. Назад"
+    printf '\n'
+    ask_num "Выбор [0-9]: "; c=$REPLY
     case $c in
       1) create_system_backup; pause ;; 2) backup_file /etc/ssh ssh; pause ;; 3) backup_file /etc/ufw firewall; pause ;;
       4) backup_file /etc/fail2ban fail2ban; pause ;; 5) list_backups; pause ;;
       6) restore_category_latest ssh; pause ;; 7) restore_category_latest firewall; pause ;; 8) restore_category_latest fail2ban; pause ;;
-      9) delete_backup; pause ;; 0) return ;;
+      9) delete_backup; pause ;; 0|"") return ;; *) echo "Нет такого пункта." ;;
     esac
   done
 }
