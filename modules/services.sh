@@ -11,21 +11,36 @@ services_menu() {
   local c
   while true; do
     header
-    box "Службы systemd"       "1. Активные службы"       "2. Все службы"       "3. Неудавшиеся службы"       ""       "4. Состояние службы"       "5. Запустить службу"       "6. Остановить службу"       "7. Перезапустить службу"       "8. Включить автозапуск"       "9. Отключить автозапуск"       "10. Логи службы"       "0. Назад"
+    ui_top "SERVICES" "systemd"
+    ui_blank
+    ui_line "[01] Активные службы"
+    ui_line "[02] Все службы"
+    ui_line "[03] Неудавшиеся службы"
+    ui_blank
+    ui_line "[04] Состояние службы"
+    ui_line "[05] Запустить службу"
+    ui_line "[06] Остановить службу"
+    ui_line "[07] Перезапустить службу"
+    ui_line "[08] Включить автозапуск"
+    ui_line "[09] Отключить автозапуск"
+    ui_line "[10] Логи службы"
+    ui_line "[00] Назад"
+    ui_bottom
     printf '\n'
-    ask_num "Выбор [0-10]: "; c=$REPLY
+    ask_num "services › "; c=$REPLY
     case $c in
-      1) systemctl --type=service --state=running --no-pager; pause ;;
-      2) systemctl list-units --type=service --all --no-pager; pause ;;
-      3) systemctl --failed --no-pager; pause ;;
-      4) n=$(ask_service) && systemctl status "$n" --no-pager; pause ;;
-      5) n=$(ask_service) && confirm "Запустить $n?" && systemctl start "$n"; pause ;;
-      6) n=$(ask_service) && confirm "Остановить $n?" && systemctl stop "$n"; pause ;;
-      7) n=$(ask_service) && confirm "Перезапустить $n?" && systemctl restart "$n"; pause ;;
-      8) n=$(ask_service) && systemctl enable "$n"; pause ;;
-      9) n=$(ask_service) && confirm "Отключить автозапуск $n?" && systemctl disable "$n"; pause ;;
+      1|01) systemctl --type=service --state=running --no-pager; pause ;;
+      2|02) systemctl list-units --type=service --all --no-pager; pause ;;
+      3|03) systemctl --failed --no-pager; pause ;;
+      4|04) n=$(ask_service) && systemctl status "$n" --no-pager; pause ;;
+      5|05) n=$(ask_service) && if systemctl is-active --quiet "$n"; then warn "$n уже запущена"; else confirm "Запустить $n?" && systemctl start "$n"; fi; pause ;;
+      6|06) n=$(ask_service) && if systemctl is-active --quiet "$n"; then confirm "Остановить $n?" && systemctl stop "$n"; else warn "$n уже остановлена"; fi; pause ;;
+      7|07) n=$(ask_service) && confirm "Перезапустить $n?" && systemctl restart "$n"; pause ;;
+      8|08) n=$(ask_service) && if systemctl is-enabled --quiet "$n"; then warn "Автозапуск $n уже включён"; else systemctl enable "$n"; fi; pause ;;
+      9|09) n=$(ask_service) && if systemctl is-enabled --quiet "$n"; then confirm "Отключить автозапуск $n?" && systemctl disable "$n"; else warn "Автозапуск $n уже выключен"; fi; pause ;;
       10) n=$(ask_service) && journalctl -u "$n" -n 150 --no-pager; pause ;;
-      0|"") return ;; *) echo "Нет такого пункта." ;;
+      0|00|"") return ;;
+      *) echo "Нет такого пункта." ;;
     esac
   done
 }
