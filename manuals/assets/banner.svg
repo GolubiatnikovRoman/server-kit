@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="420" viewBox="0 0 1640 420">
+  <rect width="1640" height="420" rx="34" fill="#221B17"/>
+  <rect x="28" y="28" width="1584" height="364" rx="26" fill="none" stroke="#3A312B" stroke-width="2"/>
+  <circle cx="92" cy="84" r="9" fill="#93E06F"/>
+  <circle cx="124" cy="84" r="9" fill="#6D5B50"/>
+  <circle cx="156" cy="84" r="9" fill="#6D5B50"/>
+  <text x="820" y="190" text-anchor="middle" fill="#F5F1ED" font-family="Arial,Helvetica,sans-serif" font-size="78" font-weight="700" letter-spacing="6">SERVER-KIT</text>
+  <text x="820" y="258" text-anchor="middle" fill="#93E06F" font-family="Arial,Helvetica,sans-serif" font-size="30" font-weight="600">УПРАВЛЕНИЕ И БАЗОВАЯ ЗАЩИТА LINUX-СЕРВЕРА</text>
+  <text x="820" y="314" text-anchor="middle" fill="#B9ADA4" font-family="Arial,Helvetica,sans-serif" font-size="24">SSH · UFW · Fail2ban · Docker · Monitoring · Backup</text>
+</svg>
