@@ -49,34 +49,30 @@ docker_cleanup() {
 }
 
 docker_menu() {
+  local c
   while true; do
-    header; printf 'DOCKER\n\n'
+    header
+
     if ! command_exists docker; then
-      warn "Docker не установлен"
-      printf '\n1. Установить Docker\n0. Назад\n\n'
-      read -r -p 'Выберите действие: ' c
-      case $c in 1) install_docker; pause ;; 0) return ;; esac
+      box "Docker · не установлен"         "SERVER-KIT может установить Docker Engine,"         "Docker CLI, containerd, Buildx и Compose."         ""         "1. Установить Docker"         "0. Назад"
+      printf '\n'
+      ask_num "Выбор [0-1]: "; c=$REPLY
+      case $c in
+        1) install_docker; pause ;;
+        0|"") return ;;
+        *) echo "Нет такого пункта." ;;
+      esac
       continue
     fi
-    if systemctl is-active --quiet docker; then ok "Docker работает"; else warn "Docker установлен, но служба не активна"; fi
-    docker --version 2>/dev/null || true
-    cat <<'MENU'
 
-1. Все контейнеры
-2. Запущенные контейнеры
-3. Запустить контейнер
-4. Остановить контейнер
-5. Перезапустить контейнер
-6. Логи контейнера
-7. Статистика контейнеров
-8. Образы
-9. Docker Compose: версия
-10. Использование диска
-11. Безопасная очистка
-12. Перезапустить службу Docker
-0. Назад
-MENU
-    printf '\n'; read -r -p 'Выберите действие: ' c
+    local state version
+    systemctl is-active --quiet docker && state="работает" || state="остановлен"
+    version=$(docker --version 2>/dev/null | sed 's/,.*//' || echo "Docker")
+
+    box "Docker · $state"       "$version"       ""       "1. Все контейнеры"       "2. Запущенные контейнеры"       "3. Запустить контейнер"       "4. Остановить контейнер"       "5. Перезапустить контейнер"       "6. Логи контейнера"       "7. Статистика контейнеров"       ""       "8. Образы"       "9. Docker Compose: версия"       "10. Использование диска"       "11. Безопасная очистка"       "12. Перезапустить службу Docker"       "0. Назад"
+
+    printf '\n'
+    ask_num "Выбор [0-12]: "; c=$REPLY
     case $c in
       1) docker ps -a; pause ;; 2) docker ps; pause ;;
       3) n=$(docker_choose_container) && docker start "$n"; pause ;;
@@ -86,7 +82,7 @@ MENU
       7) docker stats --no-stream; pause ;; 8) docker images; pause ;; 9) docker compose version; pause ;;
       10) docker system df -v; pause ;; 11) docker_cleanup; pause ;;
       12) confirm "Перезапустить службу Docker? Работа контейнеров может кратковременно прерваться." && systemctl restart docker; pause ;;
-      0) return ;;
+      0|"") return ;; *) echo "Нет такого пункта." ;;
     esac
   done
 }
