@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-# Стабильная UTF-8 ширина для рамок и русского текста.
 if locale -a 2>/dev/null | grep -qi '^C\.UTF-8$'; then
   export LC_ALL=C.UTF-8
 elif locale -a 2>/dev/null | grep -qi '^C\.utf8$'; then
@@ -37,77 +36,101 @@ else
   BOX_W=58
 fi
 
+# BOX_W = полная видимая ширина строки, включая левую и правую границу.
+INNER_W=$((BOX_W - 2))
+
 ui_wide() { (( TERM_COLS >= 92 )); }
 
 ui_repeat() {
   local ch=$1 n=$2 i
+  ((n < 0)) && n=0
   for ((i=0; i<n; i++)); do
     printf '%s' "$ch"
   done
 }
 
 visible_len() {
-  local text=$1 clean
-  clean=$(printf '%s' "$text" | sed -E $'s/\033\\[[0-9;]*[[:alpha:]]//g')
+  local clean
+  clean=$(printf '%s' "$1" | sed -E $'s/\033\\[[0-9;]*[[:alpha:]]//g')
   printf '%s' "${#clean}"
 }
 
 pad_right() {
-  local text=$1 width=$2 n len
+  local text=$1 width=$2 len pad
   len=$(visible_len "$text")
-  n=$((width - len))
-  ((n < 0)) && n=0
-  printf '%s%*s' "$text" "$n" ''
+  pad=$((width - len))
+  ((pad < 0)) && pad=0
+  printf '%s%*s' "$text" "$pad" ''
 }
 
 ui_top() {
-  local title=$1 right=${2:-} used fill
-  used=$(( ${#title} + ${#right} + 7 ))
-  fill=$((BOX_W - used))
-  ((fill < 1)) && fill=1
-  printf '╭─ %s%s%s ' "$C_BOLD" "$title" "$C_RESET"
+  local title=$1 right=${2:-}
+  local prefix="─ $title "
+  local suffix
+  if [[ -n $right ]]; then
+    suffix=" $right ─"
+  else
+    suffix="─"
+  fi
+
+  local prefix_len suffix_len fill
+  prefix_len=${#prefix}
+  suffix_len=${#suffix}
+  fill=$((INNER_W - prefix_len - suffix_len))
+
+  printf '╭%s%s%s' "$C_BOLD" "$prefix" "$C_RESET"
   ui_repeat '─' "$fill"
-  printf ' %s%s%s ─╮\n' "$C_DIM" "$right" "$C_RESET"
+  if [[ -n $right ]]; then
+    printf ' %s%s%s ─' "$C_DIM" "$right" "$C_RESET"
+  else
+    printf '─'
+  fi
+  printf '╮\n'
 }
 
 ui_bottom() {
   printf '╰'
-  ui_repeat '─' $((BOX_W - 2))
+  ui_repeat '─' "$INNER_W"
   printf '╯\n'
 }
 
 ui_sep() {
   printf '├'
-  ui_repeat '─' $((BOX_W - 2))
+  ui_repeat '─' "$INNER_W"
   printf '┤\n'
 }
 
 ui_section() {
-  local title=$1 fill
-  fill=$((BOX_W - ${#title} - 5))
-  ((fill < 1)) && fill=1
-  printf '├─ %s%s%s ' "$C_CYAN" "$title" "$C_RESET"
+  local title=$1
+  local left="─ $title "
+  local fill=$((INNER_W - ${#left}))
+  printf '├%s%s%s' "$C_CYAN" "$left" "$C_RESET"
   ui_repeat '─' "$fill"
   printf '┤\n'
 }
 
 ui_line() {
-  printf '│  %s│\n' "$(pad_right "$1" $((BOX_W - 3)))"
+  local text=$1
+  printf '│%s│\n' "$(pad_right "  $text" "$INNER_W")"
 }
 
 ui_blank() {
-  ui_line ""
+  printf '│%*s│\n' "$INNER_W" ''
 }
 
 ui_two() {
   local left=$1 right=$2
-  if ui_wide; then
-    local half=$(( (BOX_W - 7) / 2 ))
-    printf '│  %s  %s│\n' "$(pad_right "$left" "$half")" "$(pad_right "$right" "$half")"
-  else
+  if ! ui_wide; then
     ui_line "$left"
     [[ -n $right ]] && ui_line "$right"
+    return
   fi
+
+  local gap=3
+  local left_w=$(( (INNER_W - 4 - gap) / 2 ))
+  local right_w=$(( INNER_W - 4 - gap - left_w ))
+
+  printf '│  %s%*s%s  │\n'     "$(pad_right "$left" "$left_w")" "$gap" '' "$(pad_right "$right" "$right_w")"
 }
 
 ui_status() {
@@ -121,47 +144,45 @@ ui_status() {
   printf '%s  ● %s%s%s' "$label" "$color" "$state" "$C_RESET"
 }
 
-# Совместимость для старых меню, пока все модули используют общий UI.
+# Совместимость со старыми меню.
 box_rule() {
-  ui_repeat '─' "$BOX_W"
+  ui_repeat '─' "$INNER_W"
 }
 
 box_top() {
-  printf '╔'
+  printf '╭'
   box_rule
-  printf '╗\n'
+  printf '╮\n'
 }
 
 box_bottom() {
-  printf '╚'
+  printf '╰'
   box_rule
-  printf '╝\n'
+  printf '╯\n'
 }
 
 box_sep() {
-  printf '│'
+  printf '├'
   box_rule
-  printf '│\n'
+  printf '┤\n'
 }
 
 box_line() {
-  printf '│  %s│\n' "$(pad_right "$1" $((BOX_W - 2)))"
+  ui_line "$1"
 }
 
 box() {
   local title=$1 line
   shift
-  box_top
-  box_line "$title"
-  box_sep
+  ui_top "$title"
   for line in "$@"; do
     if [[ -z $line ]]; then
-      box_sep
+      ui_blank
     else
-      box_line "$line"
+      ui_line "$line"
     fi
   done
-  box_bottom
+  ui_bottom
 }
 
 header() {
