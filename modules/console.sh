@@ -28,21 +28,16 @@ preview_motd() {
 }
 
 console_menu() {
+  local c
   while true; do
     header
-    cat <<'MENU'
-ОФОРМЛЕНИЕ КОНСОЛИ
-
-1. Установить/обновить MOTD SERVER-KIT
-2. Предпросмотр MOTD
-3. Отключить MOTD SERVER-KIT
-0. Назад
-MENU
-    printf '\n'; read -r -p 'Выберите действие: ' c
+    box "Оформление консоли"       "1. Установить/обновить MOTD SERVER-KIT"       "2. Предпросмотр MOTD"       "3. Отключить MOTD SERVER-KIT"       "0. Назад"
+    printf '\n'
+    ask_num "Выбор [0-3]: "; c=$REPLY
     case $c in
       1) install_serverkit_motd; pause ;; 2) preview_motd; pause ;;
       3) confirm "Удалить только MOTD SERVER-KIT?" && rm -f "$MOTD_FILE" && ok "MOTD SERVER-KIT удалён"; pause ;;
-      0) return ;;
+      0|"") return ;; *) echo "Нет такого пункта." ;;
     esac
   done
 }
