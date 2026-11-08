@@ -10,8 +10,8 @@
   <a href="https://github.com/GolubiatnikovRoman/server-kit"><img src="https://img.shields.io/badge/SERVER--KIT-v1.1.0-93E06F?labelColor=221B17" alt="Версия"></a>
   <a href="https://ubuntu.com/"><img src="https://img.shields.io/badge/Ubuntu-supported-93E06F?labelColor=221B17" alt="Ubuntu"></a>
   <a href="https://www.debian.org/"><img src="https://img.shields.io/badge/Debian-supported-93E06F?labelColor=221B17" alt="Debian"></a>
-  <a href="https://github.com/GolubiatnikovRoman/server-kit/stargazers"><img src="https://img.shields.io/github/stars/GolubiatnikovRoman/server-kit?label=звёзды&style=flat&color=93E06F&labelColor=221B17" alt="Stars"></a>
-  <a href="https://github.com/GolubiatnikovRoman/server-kit/commits"><img src="https://img.shields.io/github/last-commit/GolubiatnikovRoman/server-kit?label=обновлено&color=93E06F&labelColor=221B17" alt="Updated"></a>
+  <a href="https://github.com/GolubiatnikovRoman/server-kit/stargazers"><img src="https://img.shields.io/github/stars/GolubiatnikovRoman/server-kit?style=flat&label=Stars&color=93E06F&labelColor=221B17" alt="Stars"></a>
+  <a href="https://github.com/GolubiatnikovRoman/server-kit/commits"><img src="https://img.shields.io/github/last-commit/GolubiatnikovRoman/server-kit?style=flat&label=Updated&color=93E06F&labelColor=221B17" alt="Updated"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-93E06F?labelColor=221B17" alt="License"></a>
 </p>
 
