@@ -28,8 +28,9 @@ if ! command -v curl >/dev/null 2>&1; then apt-get update && apt-get install -y 
 command -v sha256sum >/dev/null 2>&1 || { apt-get update && apt-get install -y coreutils; }
 
 if [[ -z $REF ]]; then
-  latest=$(curl -fsSL --max-time 10 "https://api.github.com/repos/$REPO/releases/latest" 2>/dev/null | sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -1 || true)
-  REF=${latest:-$BRANCH}
+  # install.sh из ветки main должен ставить именно актуальный main.
+  # Обновление на стабильный релиз передаёт конкретный тег через --ref.
+  REF=$BRANCH
 fi
 
 RAW="https://raw.githubusercontent.com/$REPO/$REF"
@@ -50,7 +51,13 @@ for file in "${files[@]}"; do
   curl -fsSL --retry 3 "$RAW/$file" -o "$TMP/$file"
 done
 
-if curl -fsSL --retry 2 "$RAW/SHA256SUMS" -o "$TMP/SHA256SUMS" 2>/dev/null; then
+if [[ $REF == main ]]; then
+  printf '==> Ветка main: проверка SHA-256 пропущена (ветка изменяемая)\n'
+else
+  curl -fsSL --retry 2 "$RAW/SHA256SUMS" -o "$TMP/SHA256SUMS" 2>/dev/null || {
+    echo "[✗] SHA256SUMS не найден для релиза $REF" >&2
+    exit 1
+  }
   printf '==> Проверка SHA-256\n'
   for file in "${files[@]}"; do
     expected=$(awk -v f="$file" '$2==f{print $1}' "$TMP/SHA256SUMS")
@@ -59,9 +66,6 @@ if curl -fsSL --retry 2 "$RAW/SHA256SUMS" -o "$TMP/SHA256SUMS" 2>/dev/null; then
     [[ $actual == "$expected" ]] || { echo "[✗] Ошибка SHA-256: $file" >&2; exit 1; }
   done
   printf '[✓] Контрольные суммы совпадают\n'
-else
-  echo "[!] SHA256SUMS не найден. Для production-релиза это недопустимо." >&2
-  [[ $REF == main ]] || exit 1
 fi
 
 if [[ -d $INSTALL_DIR && -f $INSTALL_DIR/VERSION ]]; then
