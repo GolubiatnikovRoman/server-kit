@@ -227,26 +227,17 @@ ssh_set_root_login() {
 }
 
 ssh_menu() {
+  local c
   while true; do
-    header; printf 'SSH\n\n'; ssh_show_status
-    cat <<'MENU'
-
-1. Начать безопасную смену SSH-порта
-2. Завершить смену SSH-порта
-3. Отменить незавершённую смену порта
-4. Отключить вход по паролю
-5. Настроить вход root
-6. Проверить конфигурацию
-7. Показать эффективную конфигурацию
-8. Восстановить последнюю резервную копию
-0. Назад
-MENU
-    printf '\n'; read -r -p 'Выберите действие: ' c
+    header
+    box "SSH"       "Порт: $(ssh_port)"       "Пароль: $(ssh_password_state)"       "PermitRootLogin: $(ssh_root_state)"       ""       "1. Начать безопасную смену SSH-порта"       "2. Завершить смену SSH-порта"       "3. Отменить незавершённую смену порта"       ""       "4. Отключить вход по паролю"       "5. Настроить вход root"       ""       "6. Проверить конфигурацию"       "7. Показать эффективную конфигурацию"       "8. Восстановить последнюю резервную копию"       "0. Назад"
+    printf '\n'
+    ask_num "Выбор [0-8]: "; c=$REPLY
     case $c in
       1) ssh_change_port_begin; pause ;; 2) ssh_change_port_finish; pause ;; 3) ssh_change_port_cancel; pause ;;
       4) confirm "Отключить вход по SSH-паролю?" && ssh_disable_password; pause ;;
       5) ssh_set_root_login; pause ;; 6) ssh_validate; pause ;; 7) sshd -T 2>/dev/null | less ;;
-      8) ssh_restore_latest; pause ;; 0) return ;;
+      8) ssh_restore_latest; pause ;; 0|"") return ;; *) echo "Нет такого пункта." ;;
     esac
   done
 }
