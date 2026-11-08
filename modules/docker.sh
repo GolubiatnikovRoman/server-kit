@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+docker_runtime_state() {
+  if ! command_exists docker; then echo "NOT INSTALLED"; return; fi
+  if ! systemctl is-active --quiet docker 2>/dev/null; then echo "STOPPED"; return; fi
+  if docker info >/dev/null 2>&1; then echo "RUNNING"; else echo "ERROR"; fi
+}
+
+docker_counts() {
+  local running total images
+  running=$(docker ps -q 2>/dev/null | wc -l | tr -d ' ')
+  total=$(docker ps -aq 2>/dev/null | wc -l | tr -d ' ')
+  images=$(docker images -q 2>/dev/null | sort -u | wc -l | tr -d ' ')
+  printf '%s %s %s' "${running:-0}" "${total:-0}" "${images:-0}"
+}
+
 install_docker() {
   confirm "Установить Docker Engine, CLI, containerd, Buildx и Docker Compose Plugin?" || return 0
   warn "Docker может публиковать контейнерные порты в обход обычных правил UFW. После установки проверяйте опубликованные порты отдельно."
@@ -49,40 +63,107 @@ docker_cleanup() {
 }
 
 docker_menu() {
-  local c
+  local c state version running total images
   while true; do
     header
+    state=$(docker_runtime_state)
 
-    if ! command_exists docker; then
-      box "Docker · не установлен"         "SERVER-KIT может установить Docker Engine,"         "Docker CLI, containerd, Buildx и Compose."         ""         "1. Установить Docker"         "0. Назад"
+    if [[ $state == "NOT INSTALLED" ]]; then
+      ui_top "DOCKER" "не установлен"
+      ui_blank
+      ui_line "Docker Engine, CLI, containerd, Buildx и Compose"
+      ui_blank
+      ui_line "[01] Установить Docker"
+      ui_line "[00] Назад"
+      ui_bottom
       printf '\n'
-      ask_num "Выбор [0-1]: "; c=$REPLY
+      ask_num "docker › "; c=$REPLY
       case $c in
-        1) install_docker; pause ;;
-        0|"") return ;;
+        1|01) install_docker; pause ;;
+        0|00|"") return ;;
         *) echo "Нет такого пункта." ;;
       esac
       continue
     fi
 
-    local state version
-    systemctl is-active --quiet docker && state="работает" || state="остановлен"
     version=$(docker --version 2>/dev/null | sed 's/,.*//' || echo "Docker")
 
-    box "Docker · $state"       "$version"       ""       "1. Все контейнеры"       "2. Запущенные контейнеры"       "3. Запустить контейнер"       "4. Остановить контейнер"       "5. Перезапустить контейнер"       "6. Логи контейнера"       "7. Статистика контейнеров"       ""       "8. Образы"       "9. Docker Compose: версия"       "10. Использование диска"       "11. Безопасная очистка"       "12. Перезапустить службу Docker"       "0. Назад"
+    if [[ $state == "STOPPED" ]]; then
+      ui_top "DOCKER" "STOPPED"
+      ui_blank
+      ui_line "$version"
+      ui_blank
+      ui_line "[01] Запустить Docker"
+      ui_line "[02] Показать журнал службы"
+      ui_line "[00] Назад"
+      ui_bottom
+      printf '\n'
+      ask_num "docker › "; c=$REPLY
+      case $c in
+        1|01) systemctl enable --now docker && ok "Docker запущен"; pause ;;
+        2|02) journalctl -u docker -n 120 --no-pager; pause ;;
+        0|00|"") return ;;
+        *) echo "Нет такого пункта." ;;
+      esac
+      continue
+    fi
+
+    if [[ $state == "ERROR" ]]; then
+      ui_top "DOCKER" "ERROR"
+      ui_blank
+      ui_line "$version"
+      ui_line "Служба активна, но Docker daemon не отвечает"
+      ui_blank
+      ui_line "[01] Перезапустить Docker"
+      ui_line "[02] Показать журнал службы"
+      ui_line "[00] Назад"
+      ui_bottom
+      printf '\n'
+      ask_num "docker › "; c=$REPLY
+      case $c in
+        1|01) confirm "Перезапустить Docker?" && systemctl restart docker; pause ;;
+        2|02) journalctl -u docker -n 120 --no-pager; pause ;;
+        0|00|"") return ;;
+        *) echo "Нет такого пункта." ;;
+      esac
+      continue
+    fi
+
+    read -r running total images <<<"$(docker_counts)"
+    ui_top "DOCKER" "RUNNING"
+    ui_blank
+    ui_line "$version"
+    ui_two "Containers: $running running / $total total" "Images: $images"
+    ui_blank
+    ui_section "ACTIONS"
+    ui_blank
+    ui_two "[01] Все контейнеры" "[07] Stats"
+    ui_two "[02] Запущенные" "[08] Images"
+    ui_two "[03] Запустить контейнер" "[09] Compose version"
+    ui_two "[04] Остановить контейнер" "[10] Использование диска"
+    ui_two "[05] Перезапустить контейнер" "[11] Безопасная очистка"
+    ui_two "[06] Логи контейнера" "[12] Restart Docker"
+    ui_blank
+    ui_line "[00] Назад"
+    ui_bottom
 
     printf '\n'
-    ask_num "Выбор [0-12]: "; c=$REPLY
+    ask_num "docker › "; c=$REPLY
     case $c in
-      1) docker ps -a; pause ;; 2) docker ps; pause ;;
-      3) n=$(docker_choose_container) && docker start "$n"; pause ;;
-      4) n=$(docker_choose_container) && confirm "Остановить $n?" && docker stop "$n"; pause ;;
-      5) n=$(docker_choose_container) && confirm "Перезапустить $n?" && docker restart "$n"; pause ;;
-      6) n=$(docker_choose_container) && docker logs --tail 200 "$n"; pause ;;
-      7) docker stats --no-stream; pause ;; 8) docker images; pause ;; 9) docker compose version; pause ;;
-      10) docker system df -v; pause ;; 11) docker_cleanup; pause ;;
+      1|01) docker ps -a; pause ;;
+      2|02) docker ps; pause ;;
+      3|03) n=$(docker_choose_container) && docker start "$n"; pause ;;
+      4|04) n=$(docker_choose_container) && confirm "Остановить $n?" && docker stop "$n"; pause ;;
+      5|05) n=$(docker_choose_container) && confirm "Перезапустить $n?" && docker restart "$n"; pause ;;
+      6|06) n=$(docker_choose_container) && docker logs --tail 200 "$n"; pause ;;
+      7|07) docker stats --no-stream; pause ;;
+      8|08) docker images; pause ;;
+      9|09) docker compose version; pause ;;
+      10) docker system df -v; pause ;;
+      11) docker_cleanup; pause ;;
       12) confirm "Перезапустить службу Docker? Работа контейнеров может кратковременно прерваться." && systemctl restart docker; pause ;;
-      0|"") return ;; *) echo "Нет такого пункта." ;;
+      0|00|"") return ;;
+      *) echo "Нет такого пункта." ;;
     esac
   done
 }
