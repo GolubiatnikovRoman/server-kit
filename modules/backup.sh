@@ -38,17 +38,43 @@ delete_backup() {
 }
 
 backup_menu() {
-  local c
+  local c ssh_bak ufw_bak f2b_bak
   while true; do
     header
-    box "Резервные копии"       "1. Создать полную копию настроек SERVER-KIT"       "2. Создать копию SSH"       "3. Создать копию UFW"       "4. Создать копию Fail2ban"       ""       "5. Показать резервные копии"       ""       "6. Восстановить последнюю копию SSH"       "7. Восстановить последнюю копию UFW"       "8. Восстановить последнюю копию Fail2ban"       "9. Удалить выбранную копию"       "0. Назад"
+    ssh_bak=$(latest_backup_dir ssh || true)
+    ufw_bak=$(latest_backup_dir firewall || true)
+    f2b_bak=$(latest_backup_dir fail2ban || true)
+
+    ui_top "BACKUPS" "$SERVERKIT_BACKUP_DIR"
+    ui_blank
+    ui_line "[01] Создать полную копию настроек"
+    ui_line "[02] Создать копию SSH"
+    if [[ -d /etc/ufw ]]; then ui_line "[03] Создать копию UFW"; fi
+    if [[ -d /etc/fail2ban ]]; then ui_line "[04] Создать копию Fail2ban"; fi
+    ui_blank
+    ui_line "[05] Показать резервные копии"
+    ui_blank
+    [[ -n $ssh_bak ]] && ui_line "[06] Восстановить последнюю копию SSH"
+    [[ -n $ufw_bak ]] && ui_line "[07] Восстановить последнюю копию UFW"
+    [[ -n $f2b_bak ]] && ui_line "[08] Восстановить последнюю копию Fail2ban"
+    ui_line "[09] Удалить выбранную копию"
+    ui_line "[00] Назад"
+    ui_bottom
+
     printf '\n'
-    ask_num "Выбор [0-9]: "; c=$REPLY
+    ask_num "backup › "; c=$REPLY
     case $c in
-      1) create_system_backup; pause ;; 2) backup_file /etc/ssh ssh; pause ;; 3) backup_file /etc/ufw firewall; pause ;;
-      4) backup_file /etc/fail2ban fail2ban; pause ;; 5) list_backups; pause ;;
-      6) restore_category_latest ssh; pause ;; 7) restore_category_latest firewall; pause ;; 8) restore_category_latest fail2ban; pause ;;
-      9) delete_backup; pause ;; 0|"") return ;; *) echo "Нет такого пункта." ;;
+      1|01) create_system_backup; pause ;;
+      2|02) backup_file /etc/ssh ssh; pause ;;
+      3|03) if [[ -d /etc/ufw ]]; then backup_file /etc/ufw firewall; pause; else echo "Нет такого пункта."; fi ;;
+      4|04) if [[ -d /etc/fail2ban ]]; then backup_file /etc/fail2ban fail2ban; pause; else echo "Нет такого пункта."; fi ;;
+      5|05) list_backups; pause ;;
+      6|06) if [[ -n $ssh_bak ]]; then restore_category_latest ssh; pause; else echo "Нет такого пункта."; fi ;;
+      7|07) if [[ -n $ufw_bak ]]; then restore_category_latest firewall; pause; else echo "Нет такого пункта."; fi ;;
+      8|08) if [[ -n $f2b_bak ]]; then restore_category_latest fail2ban; pause; else echo "Нет такого пункта."; fi ;;
+      9|09) delete_backup; pause ;;
+      0|00|"") return ;;
+      *) echo "Нет такого пункта." ;;
     esac
   done
 }
