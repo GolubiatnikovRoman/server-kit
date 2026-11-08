@@ -1,66 +1,93 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="440" viewBox="0 0 1640 440">
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="440" viewBox="0 0 1640 440" role="img" aria-label="SERVER-KIT">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0B0F14"/>
-      <stop offset="100%" stop-color="#111820"/>
+      <stop offset="0%" stop-color="#0A0F18"/>
+      <stop offset="100%" stop-color="#101827"/>
     </linearGradient>
     <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#7EE787"/>
-      <stop offset="100%" stop-color="#4CC38A"/>
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
     </linearGradient>
-    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
-      <path d="M 44 0 L 0 0 0 44" fill="none" stroke="#1C2631" stroke-width="1"/>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="#172236" stroke-width="1"/>
     </pattern>
   </defs>
 
   <rect width="1640" height="440" rx="30" fill="url(#bg)"/>
-  <rect width="1640" height="440" rx="30" fill="url(#grid)" opacity="0.45"/>
+  <rect width="1640" height="440" rx="30" fill="url(#grid)" opacity=".52"/>
 
-  <rect x="54" y="52" width="10" height="336" rx="5" fill="url(#accent)"/>
+  <rect x="58" y="52" width="7" height="336" rx="3.5" fill="url(#accent)"/>
 
-  <g transform="translate(118 84)">
-    <text x="0" y="78" fill="#F4F7FA" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="84" font-weight="800" letter-spacing="5">SERVER-KIT</text>
-    <text x="2" y="135" fill="#A9B4C0" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="28" font-weight="500">
-      Управление и базовая защита Linux-сервера
-    </text>
+  <g transform="translate(112 78)">
+    <text x="0" y="90"
+      font-family="Rubik,'Arial Black','Helvetica Neue',Arial,system-ui,sans-serif"
+      font-weight="900" font-size="88" letter-spacing="1.5"
+      fill="#F8FAFC">SERVER-KIT</text>
 
-    <g transform="translate(0 195)">
-      <rect x="0" y="0" width="140" height="42" rx="21" fill="#15221A" stroke="#2B6F48"/>
-      <text x="70" y="28" text-anchor="middle" fill="#8FE3A3" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">SSH</text>
+    <text x="2" y="145"
+      font-family="Rubik,'Helvetica Neue',Arial,system-ui,sans-serif"
+      font-weight="700" font-size="31"
+      fill="#5EE4F8">УПРАВЛЕНИЕ LINUX-СЕРВЕРОМ</text>
 
-      <rect x="158" y="0" width="140" height="42" rx="21" fill="#15221A" stroke="#2B6F48"/>
-      <text x="228" y="28" text-anchor="middle" fill="#8FE3A3" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">UFW</text>
+    <text x="2" y="198"
+      font-family="Rubik,'Helvetica Neue',Arial,system-ui,sans-serif"
+      font-weight="500" font-size="23"
+      fill="#94A3B8">Безопасные изменения · диагностика · резервные копии</text>
 
-      <rect x="316" y="0" width="160" height="42" rx="21" fill="#15221A" stroke="#2B6F48"/>
-      <text x="396" y="28" text-anchor="middle" fill="#8FE3A3" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">Fail2ban</text>
+    <g transform="translate(0 244)"
+       font-family="Rubik,'Helvetica Neue',Arial,system-ui,sans-serif"
+       font-weight="800" font-size="17">
+      <rect x="0" y="0" width="118" height="40" rx="9" fill="#0D1B2A" stroke="#1D4ED8"/>
+      <text x="59" y="26" text-anchor="middle" fill="#BAE6FD">SSH</text>
 
-      <rect x="494" y="0" width="160" height="42" rx="21" fill="#15221A" stroke="#2B6F48"/>
-      <text x="574" y="28" text-anchor="middle" fill="#8FE3A3" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">Docker</text>
+      <rect x="132" y="0" width="118" height="40" rx="9" fill="#0D1B2A" stroke="#1D4ED8"/>
+      <text x="191" y="26" text-anchor="middle" fill="#BAE6FD">UFW</text>
 
-      <rect x="672" y="0" width="200" height="42" rx="21" fill="#15221A" stroke="#2B6F48"/>
-      <text x="772" y="28" text-anchor="middle" fill="#8FE3A3" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">Monitoring</text>
+      <rect x="264" y="0" width="150" height="40" rx="9" fill="#0D1B2A" stroke="#1D4ED8"/>
+      <text x="339" y="26" text-anchor="middle" fill="#BAE6FD">FAIL2BAN</text>
+
+      <rect x="428" y="0" width="150" height="40" rx="9" fill="#0D1B2A" stroke="#1D4ED8"/>
+      <text x="503" y="26" text-anchor="middle" fill="#BAE6FD">DOCKER</text>
+
+      <rect x="592" y="0" width="188" height="40" rx="9" fill="#0D1B2A" stroke="#1D4ED8"/>
+      <text x="686" y="26" text-anchor="middle" fill="#BAE6FD">MONITORING</text>
     </g>
 
-    <text x="2" y="300" fill="#697786" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="20" letter-spacing="1.4">
-      ONE MENU • SAFE CHANGES • BACKUP &amp; ROLLBACK
-    </text>
+    <text x="2" y="346"
+      font-family="'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace"
+      font-weight="700" font-size="17"
+      fill="#64748B">$ serverkit</text>
   </g>
 
-  <g transform="translate(1190 92)">
-    <rect x="0" y="0" width="342" height="258" rx="24" fill="#0E141B" stroke="#24303B" stroke-width="2"/>
-    <rect x="28" y="28" width="286" height="54" rx="12" fill="#121B24"/>
-    <circle cx="58" cy="55" r="8" fill="#61D37D"/>
-    <text x="78" y="62" fill="#D8E0E8" font-family="monospace" font-size="18">serverkit</text>
+  <g transform="translate(1194 76)">
+    <rect x="0" y="0" width="350" height="286" rx="20" fill="#0A111D" stroke="#22304A" stroke-width="2"/>
+    <rect x="0" y="0" width="350" height="44" rx="20" fill="#111C2D"/>
+    <rect x="0" y="24" width="350" height="20" fill="#111C2D"/>
 
-    <text x="28" y="126" fill="#7EE787" font-family="monospace" font-size="18">✓</text>
-    <text x="55" y="126" fill="#C6D0DB" font-family="monospace" font-size="17">SSH protected</text>
+    <circle cx="24" cy="22" r="5" fill="#EF4444"/>
+    <circle cx="42" cy="22" r="5" fill="#F59E0B"/>
+    <circle cx="60" cy="22" r="5" fill="#22C55E"/>
 
-    <text x="28" y="162" fill="#7EE787" font-family="monospace" font-size="18">✓</text>
-    <text x="55" y="162" fill="#C6D0DB" font-family="monospace" font-size="17">Firewall active</text>
+    <g font-family="'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="16">
+      <text x="26" y="84" fill="#64748B">$</text>
+      <text x="48" y="84" fill="#CBD5E1">serverkit check</text>
 
-    <text x="28" y="198" fill="#7EE787" font-family="monospace" font-size="18">✓</text>
-    <text x="55" y="198" fill="#C6D0DB" font-family="monospace" font-size="17">Backup ready</text>
+      <text x="26" y="126" fill="#22D3EE">✓</text>
+      <text x="52" y="126" fill="#DCE6F2">SSH работает</text>
 
-    <rect x="28" y="222" width="286" height="2" fill="#1D2833"/>
+      <text x="26" y="160" fill="#22D3EE">✓</text>
+      <text x="52" y="160" fill="#DCE6F2">UFW включён</text>
+
+      <text x="26" y="194" fill="#22D3EE">✓</text>
+      <text x="52" y="194" fill="#DCE6F2">Fail2ban работает</text>
+
+      <text x="26" y="228" fill="#F59E0B">!</text>
+      <text x="52" y="228" fill="#DCE6F2">Обновлений: 3</text>
+    </g>
+
+    <rect x="26" y="252" width="298" height="1" fill="#22304A"/>
+    <text x="26" y="273"
+      font-family="Rubik,'Helvetica Neue',Arial,system-ui,sans-serif"
+      font-weight="700" font-size="13" fill="#64748B">SAFE ADMIN TOOLKIT</text>
   </g>
 </svg>
