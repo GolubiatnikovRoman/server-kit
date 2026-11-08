@@ -8,19 +8,44 @@ show_overview() {
 }
 
 monitoring_menu() {
-  local c
+  local c btop_label htop_label
   while true; do
     header
-    box "Мониторинг"       "1. Общая информация"       "2. Диски"       "3. Память и Swap"       "4. Процессы по памяти"       "5. Процессы по CPU"       ""       "6. Открытые порты"       "7. Активные TCP-соединения"       "8. Сетевые интерфейсы"       ""       "9. btop"       "10. htop"       "0. Назад"
+    command_exists btop && btop_label="btop" || btop_label="Установить btop"
+    command_exists htop && htop_label="htop" || htop_label="Установить htop"
+
+    ui_top "MONITORING" "system"
+    ui_blank
+    ui_line "[01] Общая информация"
+    ui_line "[02] Диски"
+    ui_line "[03] Память и Swap"
+    ui_line "[04] Процессы по памяти"
+    ui_line "[05] Процессы по CPU"
+    ui_blank
+    ui_line "[06] Открытые порты"
+    ui_line "[07] Активные TCP-соединения"
+    ui_line "[08] Сетевые интерфейсы"
+    ui_blank
+    ui_line "[09] $btop_label"
+    ui_line "[10] $htop_label"
+    ui_line "[00] Назад"
+    ui_bottom
+
     printf '\n'
-    ask_num "Выбор [0-10]: "; c=$REPLY
+    ask_num "monitoring › "; c=$REPLY
     case $c in
-      1) show_overview; pause ;; 2) df -hT -x tmpfs -x devtmpfs; pause ;; 3) free -h; pause ;;
-      4) ps aux --sort=-%mem | head -25; pause ;; 5) ps aux --sort=-%cpu | head -25; pause ;;
-      6) ss -lntup; pause ;; 7) ss -tnp; pause ;; 8) ip -br addr; echo; ip route; pause ;;
-      9) if command_exists btop; then btop; else confirm "Установить btop?" && apt-get update && apt-get install -y btop; fi ;;
+      1|01) show_overview; pause ;;
+      2|02) df -hT -x tmpfs -x devtmpfs; pause ;;
+      3|03) free -h; pause ;;
+      4|04) ps aux --sort=-%mem | head -25; pause ;;
+      5|05) ps aux --sort=-%cpu | head -25; pause ;;
+      6|06) ss -lntup; pause ;;
+      7|07) ss -tnp; pause ;;
+      8|08) ip -br addr; echo; ip route; pause ;;
+      9|09) if command_exists btop; then btop; else confirm "Установить btop?" && apt-get update && apt-get install -y btop; fi ;;
       10) if command_exists htop; then htop; else confirm "Установить htop?" && apt-get update && apt-get install -y htop; fi ;;
-      0|"") return ;; *) echo "Нет такого пункта." ;;
+      0|00|"") return ;;
+      *) echo "Нет такого пункта." ;;
     esac
   done
 }
