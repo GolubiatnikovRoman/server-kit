@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="760" viewBox="0 0 1520 760" role="img" aria-label="SERVER-KIT terminal preview">
+  <rect width="1520" height="760" rx="30" fill="#07101A"/>
+  <rect x="26" y="26" width="1468" height="708" rx="22" fill="#0A1420" stroke="#24344A" stroke-width="2"/>
+
+  <g transform="translate(54 48)">
+    <circle cx="16" cy="16" r="7" fill="#EF4444"/>
+    <circle cx="42" cy="16" r="7" fill="#F59E0B"/>
+    <circle cx="68" cy="16" r="7" fill="#10B981"/>
+    <text x="116" y="23" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="16" fill="#667A93">serverkit@linux</text>
+  </g>
+
+  <g transform="translate(70 122)">
+    <text x="0" y="52" font-family="Rubik,'Helvetica Neue',Arial,system-ui,sans-serif" font-size="46" font-weight="900" fill="#F8FAFC">SERVER-KIT</text>
+    <text x="0" y="88" font-family="Rubik,'Helvetica Neue',Arial,system-ui,sans-serif" font-size="18" font-weight="700" fill="#22D3EE">v1.0.0 · УПРАВЛЕНИЕ LINUX-СЕРВЕРОМ</text>
+  </g>
+
+  <g transform="translate(70 246)" font-family="'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="21">
+    <text x="0" y="0" fill="#22D3EE">01</text><text x="62" y="0" fill="#E2E8F0">SSH</text>
+    <text x="0" y="44" fill="#22D3EE">02</text><text x="62" y="44" fill="#E2E8F0">Межсетевой экран</text>
+    <text x="0" y="88" fill="#22D3EE">03</text><text x="62" y="88" fill="#E2E8F0">Безопасность</text>
+    <text x="0" y="132" fill="#22D3EE">04</text><text x="62" y="132" fill="#E2E8F0">Обновления системы</text>
+    <text x="0" y="176" fill="#22D3EE">05</text><text x="62" y="176" fill="#E2E8F0">Мониторинг</text>
+    <text x="0" y="220" fill="#22D3EE">06</text><text x="62" y="220" fill="#E2E8F0">Службы</text>
+
+    <text x="640" y="0" fill="#22D3EE">07</text><text x="702" y="0" fill="#E2E8F0">Docker</text>
+    <text x="640" y="44" fill="#22D3EE">08</text><text x="702" y="44" fill="#E2E8F0">Screen-сессии</text>
+    <text x="640" y="88" fill="#22D3EE">09</text><text x="702" y="88" fill="#E2E8F0">Резервные копии</text>
+    <text x="640" y="132" fill="#22D3EE">10</text><text x="702" y="132" fill="#E2E8F0">Диагностика</text>
+    <text x="640" y="176" fill="#22D3EE">11</text><text x="702" y="176" fill="#E2E8F0">Оформление консоли</text>
+    <text x="640" y="220" fill="#22D3EE">12</text><text x="702" y="220" fill="#E2E8F0">Информация о сервере</text>
+  </g>
+
+  <g transform="translate(70 560)">
+    <rect x="0" y="0" width="1380" height="104" rx="14" fill="#07101A" stroke="#223249"/>
+    <text x="22" y="38" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="18" fill="#6E829B">ПРОВЕРКА СЕРВЕРА</text>
+
+    <g font-family="'JetBrains Mono',ui-monospace,monospace" font-size="17">
+      <text x="22" y="76" fill="#22D3EE">✓</text><text x="48" y="76" fill="#CBD5E1">SSH работает</text>
+      <text x="300" y="76" fill="#22D3EE">✓</text><text x="326" y="76" fill="#CBD5E1">UFW включён</text>
+      <text x="570" y="76" fill="#22D3EE">✓</text><text x="596" y="76" fill="#CBD5E1">Fail2ban активен</text>
+      <text x="910" y="76" fill="#F59E0B">!</text><text x="936" y="76" fill="#CBD5E1">Обновлений: 3</text>
+    </g>
+  </g>
+</svg>
