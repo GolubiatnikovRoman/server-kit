@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="720" viewBox="0 0 1520 720">
+  <rect width="1520" height="720" rx="26" fill="#161311"/>
+  <rect x="28" y="28" width="1464" height="664" rx="20" fill="#221B17"/>
+  <circle cx="78" cy="68" r="8" fill="#93E06F"/>
+  <circle cx="106" cy="68" r="8" fill="#6D5B50"/>
+  <circle cx="134" cy="68" r="8" fill="#6D5B50"/>
+  <text x="760" y="118" text-anchor="middle" fill="#F5F1ED" font-family="monospace" font-size="30" font-weight="700">SERVER-KIT v1.0.0</text>
+  <text x="110" y="184" fill="#93E06F" font-family="monospace" font-size="26">1.</text>
+  <text x="160" y="184" fill="#F5F1ED" font-family="monospace" font-size="26">SSH</text>
+  <text x="110" y="228" fill="#93E06F" font-family="monospace" font-size="26">2.</text>
+  <text x="160" y="228" fill="#F5F1ED" font-family="monospace" font-size="26">Межсетевой экран</text>
+  <text x="110" y="272" fill="#93E06F" font-family="monospace" font-size="26">3.</text>
+  <text x="160" y="272" fill="#F5F1ED" font-family="monospace" font-size="26">Безопасность</text>
+  <text x="110" y="316" fill="#93E06F" font-family="monospace" font-size="26">4.</text>
+  <text x="160" y="316" fill="#F5F1ED" font-family="monospace" font-size="26">Обновления системы</text>
+  <text x="110" y="360" fill="#93E06F" font-family="monospace" font-size="26">5.</text>
+  <text x="160" y="360" fill="#F5F1ED" font-family="monospace" font-size="26">Мониторинг</text>
+  <text x="110" y="404" fill="#93E06F" font-family="monospace" font-size="26">6.</text>
+  <text x="160" y="404" fill="#F5F1ED" font-family="monospace" font-size="26">Службы</text>
+  <text x="790" y="184" fill="#93E06F" font-family="monospace" font-size="26">7.</text>
+  <text x="840" y="184" fill="#F5F1ED" font-family="monospace" font-size="26">Docker</text>
+  <text x="790" y="228" fill="#93E06F" font-family="monospace" font-size="26">8.</text>
+  <text x="840" y="228" fill="#F5F1ED" font-family="monospace" font-size="26">Screen-сессии</text>
+  <text x="790" y="272" fill="#93E06F" font-family="monospace" font-size="26">9.</text>
+  <text x="840" y="272" fill="#F5F1ED" font-family="monospace" font-size="26">Резервные копии</text>
+  <text x="790" y="316" fill="#93E06F" font-family="monospace" font-size="26">10.</text>
+  <text x="858" y="316" fill="#F5F1ED" font-family="monospace" font-size="26">Диагностика</text>
+  <text x="790" y="360" fill="#93E06F" font-family="monospace" font-size="26">11.</text>
+  <text x="858" y="360" fill="#F5F1ED" font-family="monospace" font-size="26">Оформление консоли</text>
+  <text x="790" y="404" fill="#93E06F" font-family="monospace" font-size="26">12.</text>
+  <text x="858" y="404" fill="#F5F1ED" font-family="monospace" font-size="26">Информация о сервере</text>
+  <line x1="110" y1="472" x2="1410" y2="472" stroke="#3A312B" stroke-width="2"/>
+  <text x="110" y="530" fill="#B9ADA4" font-family="monospace" font-size="24">Выберите действие:</text>
+  <rect x="110" y="566" width="1300" height="70" rx="12" fill="#171411" stroke="#3A312B"/>
+  <text x="140" y="610" fill="#93E06F" font-family="monospace" font-size="24">serverkit</text>
+  <text x="285" y="610" fill="#F5F1ED" font-family="monospace" font-size="24">— управление сервером из одного меню</text>
+</svg>
