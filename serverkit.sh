@@ -24,6 +24,23 @@ require_root
 supported_os || { err "Поддерживаются Ubuntu и Debian."; exit 1; }
 ensure_dirs
 
+main_status() {
+  local ssh_state ufw_state f2b_state docker_state updates reboot
+  systemctl is-active --quiet "$(ssh_service_name)" 2>/dev/null && ssh_state="SSH работает" || ssh_state="SSH НЕ работает"
+  ufw_active && ufw_state="UFW включён" || ufw_state="UFW выключен"
+  systemctl is-active --quiet fail2ban 2>/dev/null && f2b_state="Fail2ban работает" || f2b_state="Fail2ban не работает"
+  if command_exists docker; then
+    systemctl is-active --quiet docker 2>/dev/null && docker_state="Docker работает" || docker_state="Docker остановлен"
+  else
+    docker_state="Docker не установлен"
+  fi
+  updates=$(count_updates 2>/dev/null || echo "?")
+  [[ -f /var/run/reboot-required ]] && reboot=" · нужна перезагрузка" || reboot=""
+
+  printf 'Состояние: %s · %s · %s\n' "$ssh_state" "$ufw_state" "$f2b_state"
+  printf 'Docker: %s · обновлений: %s%s\n' "$docker_state" "$updates" "$reboot"
+}
+
 server_info() {
   header
   local mem disk ipv4 docker_state ufw_state f2b_state
@@ -33,74 +50,83 @@ server_info() {
   command_exists docker && docker_state="установлен" || docker_state="не установлен"
   ufw_active && ufw_state="включён" || ufw_state="выключен/не установлен"
   systemctl is-active --quiet fail2ban 2>/dev/null && f2b_state="работает" || f2b_state="не работает"
-  printf 'ИНФОРМАЦИЯ О СЕРВЕРЕ\n\n'
-  printf 'ОС:              %s\n' "$(os_name)"
-  printf 'Kernel:          %s\n' "$(uname -r)"
-  printf 'Архитектура:     %s\n' "$(uname -m)"
-  printf 'Hostname:        %s\n' "$(hostname)"
-  printf 'Uptime:          %s\n' "$(uptime -p 2>/dev/null || true)"
-  printf 'Load average:    %s\n' "$(awk '{print $1", "$2", "$3}' /proc/loadavg)"
-  printf 'RAM:             %s\n' "$mem"
-  printf 'Диск /:          %s\n' "$disk"
-  printf 'IPv4:            %s\n' "${ipv4:-не найден}"
-  printf 'SSH-порт:        %s\n' "$(ssh_port)"
-  printf 'UFW:             %s\n' "$ufw_state"
-  printf 'Fail2ban:        %s\n' "$f2b_state"
-  printf 'Docker:          %s\n' "$docker_state"
-  printf 'Timezone:        %s\n' "$(timedatectl show -p Timezone --value 2>/dev/null || true)"
+
+  box "SERVER-KIT $SERVERKIT_VERSION – информация о сервере" \
+    "ОС: $(os_name)" \
+    "Kernel: $(uname -r)" \
+    "Архитектура: $(uname -m)" \
+    "Hostname: $(hostname)" \
+    "Uptime: $(uptime -p 2>/dev/null || true)" \
+    "RAM: $mem" \
+    "Диск /: $disk" \
+    "IPv4: ${ipv4:-не найден}" \
+    "SSH-порт: $(ssh_port)" \
+    "UFW: $ufw_state" \
+    "Fail2ban: $f2b_state" \
+    "Docker: $docker_state" \
+    "Timezone: $(timedatectl show -p Timezone --value 2>/dev/null || true)"
   pause
 }
 
 settings_menu() {
+  local c
   while true; do
     header
-    printf 'НАСТРОЙКИ SERVER-KIT\n\nТекущая версия: v%s\n\n' "$SERVERKIT_VERSION"
-    cat <<'MENU'
-1. Проверить обновления
-2. Обновить SERVER-KIT
-3. Показать CHANGELOG
-4. Показать версию
-5. Удалить SERVER-KIT
-0. Назад
-MENU
-    printf '\n'; read -r -p 'Выберите действие: ' c
+    box "SERVER-KIT $SERVERKIT_VERSION – настройки" \
+      "1. Проверить обновления" \
+      "2. Обновить SERVER-KIT" \
+      "3. Показать CHANGELOG" \
+      "4. Показать версию" \
+      "" \
+      "5. Удалить SERVER-KIT" \
+      "0. Назад"
+    printf '\n'
+    ask_num "Выбор [0-5]: "; c=$REPLY
     case $c in
       1) if serverkit_check_update; then warn "Доступно обновление"; fi; pause ;;
       2) serverkit_update; pause ;;
       3) less "$ROOT_DIR/CHANGELOG.md" ;;
       4) echo "SERVER-KIT v$SERVERKIT_VERSION"; pause ;;
       5) serverkit_uninstall; exit 0 ;;
-      0) return ;;
+      0|"") return ;;
+      *) echo "Нет такого пункта." ;;
     esac
   done
 }
 
 main_menu() {
+  local c
   while true; do
     header
-    cat <<'MENU'
-  1. SSH
-  2. Межсетевой экран
-  3. Безопасность
-  4. Обновления системы
-  5. Мониторинг
-  6. Службы
-  7. Docker
-  8. Screen-сессии
-  9. Резервные копии
- 10. Диагностика
- 11. Оформление консоли
- 12. Информация о сервере
- 13. Настройки SERVER-KIT
+    box "SERVER-KIT $SERVERKIT_VERSION – управление сервером" \
+      "1. SSH" \
+      "2. Межсетевой экран" \
+      "3. Безопасность" \
+      "" \
+      "4. Обновления системы" \
+      "5. Мониторинг" \
+      "6. Службы" \
+      "" \
+      "7. Docker" \
+      "8. Screen-сессии" \
+      "9. Резервные копии" \
+      "" \
+      "10. Диагностика" \
+      "11. Оформление консоли" \
+      "12. Информация о сервере" \
+      "" \
+      "13. Настройки SERVER-KIT" \
+      "0. Выход"
 
-  0. Выход
-MENU
-    printf '\n'; read -r -p 'Выберите действие: ' c
+    printf '\n'
+    main_status
+    printf '\n'
+    ask_num "Выбор [0-13]: "; c=$REPLY
     case $c in
       1) ssh_menu ;; 2) firewall_menu ;; 3) security_menu ;; 4) updates_menu ;;
       5) monitoring_menu ;; 6) services_menu ;; 7) docker_menu ;; 8) screen_menu ;;
       9) backup_menu ;; 10) diagnostics_menu ;; 11) console_menu ;; 12) server_info ;;
-      13) settings_menu ;; 0) exit 0 ;; *) warn "Неизвестный пункт меню"; sleep 1 ;;
+      13) settings_menu ;; 0|"") exit 0 ;; *) echo "Нет такого пункта." ;;
     esac
   done
 }
