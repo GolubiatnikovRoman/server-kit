@@ -49,22 +49,13 @@ firewall_allow_ip() {
 }
 
 firewall_menu() {
+  local c state
   while true; do
-    header; printf 'МЕЖСЕТЕВОЙ ЭКРАН\n\n'
-    if ufw_installed; then ufw status verbose || true; else warn "UFW не установлен"; fi
-    cat <<'MENU'
-
-1. Установить UFW
-2. Включить UFW безопасно
-3. Отключить UFW
-4. Открыть порт
-5. Закрыть порт
-6. Разрешить IP/подсеть
-7. Показать правила с номерами
-8. Удалить правило по номеру
-0. Назад
-MENU
-    printf '\n'; read -r -p 'Выберите действие: ' c
+    header
+    if ufw_active; then state="включён"; elif ufw_installed; then state="выключен"; else state="не установлен"; fi
+    box "Межсетевой экран · UFW: $state"       "1. Установить UFW"       "2. Включить UFW безопасно"       "3. Отключить UFW"       ""       "4. Открыть порт"       "5. Закрыть порт"       "6. Разрешить IP/подсеть"       ""       "7. Показать правила с номерами"       "8. Удалить правило по номеру"       "0. Назад"
+    printf '\n'
+    ask_num "Выбор [0-8]: "; c=$REPLY
     case $c in
       1) firewall_install; pause ;; 2) firewall_enable; pause ;;
       3) ufw_installed && confirm "Отключить UFW?" && ufw disable; pause ;;
@@ -73,7 +64,7 @@ MENU
       6) ufw_installed && firewall_allow_ip || err "UFW не установлен"; pause ;;
       7) ufw_installed && ufw status numbered; pause ;;
       8) if ufw_installed; then read -r -p 'Номер правила: ' n; [[ $n =~ ^[0-9]+$ ]] && confirm "Удалить правило №$n?" && ufw --force delete "$n"; fi; pause ;;
-      0) return ;;
+      0|"") return ;; *) echo "Нет такого пункта." ;;
     esac
   done
 }
