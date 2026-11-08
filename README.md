@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/GolubiatnikovRoman/server-kit"><img src="https://img.shields.io/badge/SERVER--KIT-v1.0.0-93E06F?labelColor=221B17" alt="Версия"></a>
+  <a href="https://github.com/GolubiatnikovRoman/server-kit"><img src="https://img.shields.io/badge/SERVER--KIT-v1.1.0-93E06F?labelColor=221B17" alt="Версия"></a>
   <a href="https://ubuntu.com/"><img src="https://img.shields.io/badge/Ubuntu-supported-93E06F?labelColor=221B17" alt="Ubuntu"></a>
   <a href="https://www.debian.org/"><img src="https://img.shields.io/badge/Debian-supported-93E06F?labelColor=221B17" alt="Debian"></a>
   <a href="https://github.com/GolubiatnikovRoman/server-kit/stargazers"><img src="https://img.shields.io/github/stars/GolubiatnikovRoman/server-kit?label=звёзды&style=flat&color=93E06F&labelColor=221B17" alt="Stars"></a>
@@ -23,7 +23,7 @@
 
 **SERVER-KIT** — русскоязычный набор инструментов для администрирования Ubuntu и Debian VPS.
 Он объединяет настройку SSH, UFW, Fail2ban, Docker, Screen, мониторинг, резервные копии и диагностику
-в одном меню. После установки достаточно команды `serverkit`.
+в одном адаптивном терминальном dashboard. Меню автоматически учитывает текущее состояние сервера и показывает только релевантные действия.
 
 <p align="center">
   <img src="manuals/assets/script-preview-v3.svg" alt="Интерфейс SERVER-KIT" width="900">
@@ -32,12 +32,12 @@
 ## Возможности
 
 - 🔐 **SSH.** Безопасная двухэтапная смена порта, проверка `sshd -t`, отключение входа по паролю только при наличии SSH-ключа, настройка `PermitRootLogin` и rollback.
-- 🧱 **UFW.** Установка по подтверждению, безопасное включение, управление портами, IP и правилами.
-- 🛡️ **Fail2ban и защита.** Защита SSH, просмотр блокировок, разблокировка IP и автоматические security-обновления.
+- 🧱 **UFW.** Установка по подтверждению, безопасное включение, управление портами, IP и проверка правила текущего SSH-порта.
+- 🛡️ **Fail2ban и защита.** Проверка SSH jail, просмотр блокировок, разблокировка IP и автоматические security-обновления.
 - 🔄 **Обновления системы.** `apt update`, upgrade/full-upgrade, проверка необходимости перезагрузки.
 - 📊 **Мониторинг.** CPU, RAM, Swap, диски, процессы, сеть, порты, соединения, `btop` и `htop`.
 - ⚙️ **Службы.** Управление systemd: запуск, остановка, restart, автозапуск и журналы.
-- 🐳 **Docker.** Установка только после подтверждения, управление контейнерами, логами, stats, images и Compose.
+- 🐳 **Docker.** Установка только при отсутствии, состояния RUNNING/STOPPED/ERROR, контейнеры, логи, stats, images и Compose.
 - 🖥️ **Screen.** Создание, подключение, переподключение и завершение сессий.
 - 💾 **Резервные копии.** Backup SSH, UFW, Fail2ban и системных настроек.
 - 🩺 **Диагностика.** Проверка SSH, DNS, HTTPS, дисков, служб, портов и базовых проблем безопасности.
