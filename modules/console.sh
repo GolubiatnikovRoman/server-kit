@@ -33,7 +33,7 @@ console_menu() {
     header
 
     if [[ -x $MOTD_FILE ]]; then
-      ui_top "CONSOLE" "MOTD active"
+      ui_top "ОФОРМЛЕНИЕ КОНСОЛИ" "MOTD включён"
       ui_blank
       ui_line "[01] Обновить MOTD SERVER-KIT"
       ui_line "[02] Предпросмотр MOTD"
@@ -41,7 +41,7 @@ console_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "console › "; c=$REPLY
+      ask_num "Выберите пункт: ; c=$REPLY
       case $c in
         1|01) install_serverkit_motd; pause ;;
         2|02) preview_motd; pause ;;
@@ -50,13 +50,13 @@ console_menu() {
         *) echo "Нет такого пункта." ;;
       esac
     else
-      ui_top "CONSOLE" "MOTD disabled"
+      ui_top "ОФОРМЛЕНИЕ КОНСОЛИ" "MOTD выключен"
       ui_blank
       ui_line "[01] Установить MOTD SERVER-KIT"
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "console › "; c=$REPLY
+      ask_num "Выберите пункт: ; c=$REPLY
       case $c in
         1|01) install_serverkit_motd; pause ;;
         0|00|"") return ;;
