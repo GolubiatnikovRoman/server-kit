@@ -61,7 +61,7 @@ firewall_menu() {
     header
 
     if ! ufw_installed; then
-      ui_top "FIREWALL" "UFW"
+      ui_top "МЕЖСЕТЕВОЙ ЭКРАН" "UFW"
       ui_blank
       ui_line "UFW не установлен"
       ui_blank
@@ -69,7 +69,7 @@ firewall_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "firewall › "; c=$REPLY
+      ask_num "Выберите пункт: ; c=$REPLY
       case $c in
         1|01) firewall_install; pause ;;
         0|00|"") return ;;
@@ -78,8 +78,8 @@ firewall_menu() {
       continue
     fi
 
-    ufw_active && state="ACTIVE" || state="OFF"
-    ui_top "FIREWALL" "$state"
+    ufw_active && state="Активен" || state="Выключен"
+    ui_top "МЕЖСЕТЕВОЙ ЭКРАН" "$state"
     ui_blank
     ui_line "Текущий SSH-порт: $(ssh_port)/tcp"
     if ufw_active; then
@@ -103,7 +103,7 @@ firewall_menu() {
     ui_bottom
 
     printf '\n'
-    ask_num "firewall › "; c=$REPLY
+    ask_num "Выберите пункт: ; c=$REPLY
     case $c in
       1|01)
         if ufw_active; then confirm "Отключить UFW?" && ufw disable
