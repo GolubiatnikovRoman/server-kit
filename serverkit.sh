@@ -132,7 +132,7 @@ settings_menu() {
     ui_line "[00] Назад"
     ui_bottom
     printf '\n'
-    ask_num "Выберите пункт: ; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01) if serverkit_check_update; then warn "Доступно обновление"; fi; pause ;;
       2|02) serverkit_update; pause ;;
@@ -151,7 +151,7 @@ main_menu() {
     header
     main_dashboard
     printf '\n'
-    ask_num "Выберите пункт: ; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01) ssh_menu ;;
       2|02) firewall_menu ;;
