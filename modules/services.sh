@@ -27,7 +27,7 @@ services_menu() {
     ui_line "[00] Назад"
     ui_bottom
     printf '\n'
-    ask_num "Выберите пункт: ; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01) systemctl --type=service --state=running --no-pager; pause ;;
       2|02) systemctl list-units --type=service --all --no-pager; pause ;;
