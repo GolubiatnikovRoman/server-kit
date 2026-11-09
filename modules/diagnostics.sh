@@ -59,7 +59,7 @@ diagnostics_menu() {
   local c
   while true; do
     header
-    ui_top "DIAGNOSTICS" "server health"
+    ui_top "ДИАГНОСТИКА" "Состояние сервера"
     ui_blank
     ui_line "[01] Быстрая проверка"
     ui_line "[02] Полная проверка"
@@ -73,7 +73,7 @@ diagnostics_menu() {
     ui_bottom
 
     printf '\n'
-    ask_num "diagnostics › "; c=$REPLY
+    ask_num "Выберите пункт: ; c=$REPLY
     case $c in
       1|01) quick_check; pause ;;
       2|02) full_check; pause ;;
