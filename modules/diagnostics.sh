@@ -73,7 +73,7 @@ diagnostics_menu() {
     ui_bottom
 
     printf '\n'
-    ask_num "Выберите пункт: ; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01) quick_check; pause ;;
       2|02) full_check; pause ;;
