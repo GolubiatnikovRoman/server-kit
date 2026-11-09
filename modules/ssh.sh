@@ -260,7 +260,7 @@ ssh_menu() {
     ui_bottom
 
     printf '\n'
-    ask_num "Выберите пункт: ; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01)
         if [[ $pending == yes ]]; then ssh_change_port_finish
