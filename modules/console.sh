@@ -2,6 +2,47 @@
 
 MOTD_FILE=/etc/update-motd.d/99-serverkit
 
+UBUNTU_MOTD_STATE=/var/lib/serverkit/ubuntu-motd-modes
+
+ubuntu_motd_scripts() {
+  local f name
+  for f in /etc/update-motd.d/*; do
+    [[ -f $f ]] || continue
+    name=$(basename "$f")
+    case "$name" in
+      00-header|10-help-text|50-motd-news|80-esm|80-esm-updates|80-livepatch|90-updates-available|91-contract-ua-esm-status|91-release-upgrade|92-unattended-upgrades|95-hwe-eol|98-fsck-at-reboot|98-reboot-required) printf '%s\n' "$f" ;;
+    esac
+  done
+}
+
+disable_ubuntu_motd() {
+  [[ ! -f $UBUNTU_MOTD_STATE ]] || { warn "Настройки Ubuntu MOTD уже сохранены"; return 0; }
+  confirm "Скрыть стандартную сводку Ubuntu при SSH-входе?" || return 0
+  local f mode
+  mkdir -p /var/lib/serverkit
+  : > "$UBUNTU_MOTD_STATE"
+  chmod 600 "$UBUNTU_MOTD_STATE"
+  while IFS= read -r f; do
+    [[ -x $f ]] || continue
+    mode=$(stat -c %a "$f") || continue
+    printf '%s %s\n' "$mode" "$f" >> "$UBUNTU_MOTD_STATE"
+    chmod a-x "$f"
+  done < <(ubuntu_motd_scripts)
+  ok "Стандартные скрипты Ubuntu MOTD скрыты; SERVER-KIT сохранён"
+}
+
+restore_ubuntu_motd() {
+  [[ -f $UBUNTU_MOTD_STATE ]] || { warn "Сохранённые права MOTD не найдены"; return 0; }
+  confirm "Восстановить стандартную сводку Ubuntu?" || return 0
+  local mode f
+  while read -r mode f; do
+    [[ $mode =~ ^[0-7]{3,4}$ && -f $f && $f == /etc/update-motd.d/* ]] || continue
+    chmod "$mode" "$f"
+  done < "$UBUNTU_MOTD_STATE"
+  rm -f "$UBUNTU_MOTD_STATE"
+  ok "Права стандартных скриптов Ubuntu MOTD восстановлены"
+}
+
 install_serverkit_motd() {
   [[ -e $MOTD_FILE ]] && backup_file "$MOTD_FILE" console >/dev/null || true
   cat > "$MOTD_FILE" <<'MOTD'
@@ -38,6 +79,8 @@ console_menu() {
       ui_line "[01] Обновить MOTD SERVER-KIT"
       ui_line "[02] Предпросмотр MOTD"
       ui_line "[03] Отключить MOTD SERVER-KIT"
+      ui_line "[04] Скрыть сводку Ubuntu"
+      ui_line "[05] Восстановить сводку Ubuntu"
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
@@ -46,6 +89,8 @@ console_menu() {
         1|01) install_serverkit_motd; pause ;;
         2|02) preview_motd; pause ;;
         3|03) confirm "Удалить только MOTD SERVER-KIT?" && rm -f "$MOTD_FILE" && ok "MOTD SERVER-KIT удалён"; pause ;;
+        4|04) disable_ubuntu_motd; pause ;;
+        5|05) restore_ubuntu_motd; pause ;;
         0|00|"") return ;;
         *) echo "Нет такого пункта." ;;
       esac
