@@ -77,7 +77,7 @@ docker_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "Выберите пункт: ; c=$REPLY
+      ask_num "Выберите пункт: "; c=$REPLY
       case $c in
         1|01) install_docker; pause ;;
         0|00|"") return ;;
@@ -98,7 +98,7 @@ docker_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "Выберите пункт: ; c=$REPLY
+      ask_num "Выберите пункт: "; c=$REPLY
       case $c in
         1|01) systemctl enable --now docker && ok "Docker запущен"; pause ;;
         2|02) journalctl -u docker -n 120 --no-pager; pause ;;
@@ -119,7 +119,7 @@ docker_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "Выберите пункт: ; c=$REPLY
+      ask_num "Выберите пункт: "; c=$REPLY
       case $c in
         1|01) confirm "Перезапустить Docker?" && systemctl restart docker; pause ;;
         2|02) journalctl -u docker -n 120 --no-pager; pause ;;
@@ -148,7 +148,7 @@ docker_menu() {
     ui_bottom
 
     printf '\n'
-    ask_num "Выберите пункт: ; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01) docker ps -a; pause ;;
       2|02) docker ps; pause ;;
