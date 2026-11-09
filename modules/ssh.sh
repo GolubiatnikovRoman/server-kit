@@ -235,12 +235,12 @@ ssh_menu() {
     [[ -f $SSH_PENDING ]] && pending=yes || pending=no
     has_authorized_key_for_login_user && key_state="найден" || key_state="не найден"
 
-    ui_top "SSH" "port $(ssh_port)"
+    ui_top "SSH" "порт $(ssh_port)"
     ui_blank
-    ui_two "Password auth: $pass" "SSH key: $key_state"
-    ui_two "Root login: $root" "Config: $(sshd -t 2>/dev/null && echo OK || echo ERROR)"
+    ui_two "Вход по паролю: $pass" "SSH-ключ: $key_state"
+    ui_two "Вход root: $root" "Конфигурация: $(sshd -t 2>/dev/null && echo OK || echo ОШИБКА)"
     ui_blank
-    ui_section "ACTIONS"
+    ui_section "ДЕЙСТВИЯ"
     ui_blank
     if [[ $pending == yes ]]; then
       ui_line "[01] Завершить смену SSH-порта"
@@ -260,7 +260,7 @@ ssh_menu() {
     ui_bottom
 
     printf '\n'
-    ask_num "ssh › "; c=$REPLY
+    ask_num "Выберите пункт: ; c=$REPLY
     case $c in
       1|01)
         if [[ $pending == yes ]]; then ssh_change_port_finish
