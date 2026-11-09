@@ -60,7 +60,7 @@ else
   }
   printf '==> Проверка SHA-256\n'
   for file in "${files[@]}"; do
-    expected=$(awk -v f="$file" '$2==f{print $1}' "$TMP/SHA256SUMS")
+    expected=$(awk -v f="$file" '{ name=$2; sub(/^\*/, "", name); if (name==f) { print $1; exit } }' "$TMP/SHA256SUMS")
     [[ -n $expected ]] || { echo "[✗] В SHA256SUMS нет $file" >&2; exit 1; }
     actual=$(sha256sum "$TMP/$file" | awk '{print $1}')
     [[ $actual == "$expected" ]] || { echo "[✗] Ошибка SHA-256: $file" >&2; exit 1; }
