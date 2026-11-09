@@ -84,7 +84,7 @@ console_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "Выберите пункт: ; c=$REPLY
+      ask_num "Выберите пункт: "; c=$REPLY
       case $c in
         1|01) install_serverkit_motd; pause ;;
         2|02) preview_motd; pause ;;
@@ -101,7 +101,7 @@ console_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "Выберите пункт: ; c=$REPLY
+      ask_num "Выберите пункт: "; c=$REPLY
       case $c in
         1|01) install_serverkit_motd; pause ;;
         0|00|"") return ;;
