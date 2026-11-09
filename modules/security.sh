@@ -55,21 +55,21 @@ security_menu() {
     header
 
     if ! command_exists fail2ban-client; then
-      ui_top "SECURITY" "Fail2ban"
+      ui_top "БЕЗОПАСНОСТЬ" "Fail2ban"
       ui_blank
       ui_line "Fail2ban не установлен"
       ui_blank
       ui_line "[01] Установить и включить Fail2ban"
       if ! security_updates_enabled; then
-        ui_line "[02] Включить security-обновления"
+        ui_line "[02] Включить обновления безопасности"
       else
-        ui_line "Security updates: включены"
+        ui_line "Обновления безопасности: включены"
       fi
       ui_line "[03] Базовая проверка безопасности"
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "security › "; c=$REPLY
+      ask_num "Выберите пункт: ; c=$REPLY
       case $c in
         1|01) install_fail2ban; pause ;;
         2|02) if security_updates_enabled; then echo "Нет такого пункта."; else enable_unattended_upgrades; pause; fi ;;
@@ -80,16 +80,16 @@ security_menu() {
       continue
     fi
 
-    if fail2ban_ssh_protected; then f2b="ACTIVE · SSH protected"
-    elif systemctl is-active --quiet fail2ban 2>/dev/null; then f2b="ACTIVE · SSH jail missing"
-    else f2b="STOPPED"
+    if fail2ban_ssh_protected; then f2b="Активен · SSH защищён"
+    elif systemctl is-active --quiet fail2ban 2>/dev/null; then f2b="Активен · нет SSH jail"
+    else f2b="Остановлен"
     fi
 
-    ui_top "SECURITY" "Fail2ban"
+    ui_top "БЕЗОПАСНОСТЬ" "Fail2ban"
     ui_blank
     ui_line "Fail2ban: $f2b"
-    if security_updates_enabled; then ui_line "Security updates: включены"
-    else ui_line "Security updates: выключены"
+    if security_updates_enabled; then ui_line "Обновления безопасности: включены"
+    else ui_line "Обновления безопасности: выключены"
     fi
     ui_blank
 
@@ -103,13 +103,13 @@ security_menu() {
     ui_line "[04] Последние неудачные SSH-входы"
     ui_blank
     if ! security_updates_enabled; then
-      ui_line "[05] Включить security-обновления"
+      ui_line "[05] Включить обновления безопасности"
     fi
     ui_line "[06] Базовая проверка безопасности"
     ui_line "[00] Назад"
     ui_bottom
     printf '\n'
-    ask_num "security › "; c=$REPLY
+    ask_num "Выберите пункт: ; c=$REPLY
     case $c in
       1|01)
         if systemctl is-active --quiet fail2ban 2>/dev/null; then fail2ban-client status 2>/dev/null || err "Fail2ban недоступен"
