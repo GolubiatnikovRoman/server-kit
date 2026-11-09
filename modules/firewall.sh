@@ -69,7 +69,7 @@ firewall_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "Выберите пункт: ; c=$REPLY
+      ask_num "Выберите пункт: "; c=$REPLY
       case $c in
         1|01) firewall_install; pause ;;
         0|00|"") return ;;
@@ -103,7 +103,7 @@ firewall_menu() {
     ui_bottom
 
     printf '\n'
-    ask_num "Выберите пункт: ; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01)
         if ufw_active; then confirm "Отключить UFW?" && ufw disable
