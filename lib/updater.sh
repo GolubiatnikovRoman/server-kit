@@ -39,6 +39,12 @@ serverkit_update() {
 serverkit_uninstall() {
   warn "Будет удалён только SERVER-KIT. Docker, UFW, Fail2ban и применённые системные настройки останутся."
   confirm "Удалить SERVER-KIT?" || return 0
+  if [[ -f /var/lib/serverkit/ubuntu-motd-modes ]]; then
+    restore_ubuntu_motd
+    if [[ -f /var/lib/serverkit/ubuntu-motd-modes ]]; then
+      warn "Сводка Ubuntu пока скрыта. Восстановить её можно вручную по файлу /var/lib/serverkit/ubuntu-motd-modes."
+    fi
+  fi
   rm -f /usr/local/bin/serverkit
   rm -rf /opt/serverkit
   if confirm "Удалить MOTD SERVER-KIT?"; then rm -f /etc/update-motd.d/99-serverkit; fi

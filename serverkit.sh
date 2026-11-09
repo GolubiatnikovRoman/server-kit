@@ -28,50 +28,50 @@ main_dashboard() {
   local updates update_kind reboot reboot_kind
 
   if systemctl is-active --quiet "$(ssh_service_name)" 2>/dev/null; then
-    ssh_state="ONLINE"; ssh_kind=ok
+    ssh_state="Работает"; ssh_kind=ok
   else
-    ssh_state="OFFLINE"; ssh_kind=bad
+    ssh_state="Не работает"; ssh_kind=bad
   fi
 
   if ufw_active; then
-    if ufw_ssh_allowed; then ufw_state="ACTIVE"; ufw_kind=ok
-    else ufw_state="SSH RULE MISSING"; ufw_kind=warn
+    if ufw_ssh_allowed; then ufw_state="Активен"; ufw_kind=ok
+    else ufw_state="Нет правила SSH"; ufw_kind=warn
     fi
   elif ufw_installed; then
-    ufw_state="OFF"; ufw_kind=warn
+    ufw_state="Выключен"; ufw_kind=warn
   else
-    ufw_state="NOT INSTALLED"; ufw_kind=dim
+    ufw_state="Не установлен"; ufw_kind=dim
   fi
 
   if command_exists fail2ban-client; then
-    if fail2ban_ssh_protected; then f2b_state="SSH PROTECTED"; f2b_kind=ok
-    elif systemctl is-active --quiet fail2ban 2>/dev/null; then f2b_state="SSH JAIL MISSING"; f2b_kind=warn
-    else f2b_state="STOPPED"; f2b_kind=warn
+    if fail2ban_ssh_protected; then f2b_state="SSH защищён"; f2b_kind=ok
+    elif systemctl is-active --quiet fail2ban 2>/dev/null; then f2b_state="Нет SSH jail"; f2b_kind=warn
+    else f2b_state="Остановлен"; f2b_kind=warn
     fi
   else
-    f2b_state="NOT INSTALLED"; f2b_kind=dim
+    f2b_state="Не установлен"; f2b_kind=dim
   fi
 
   case "$(docker_runtime_state)" in
-    RUNNING) docker_state="RUNNING"; docker_kind=ok ;;
-    STOPPED) docker_state="STOPPED"; docker_kind=warn ;;
-    ERROR) docker_state="ERROR"; docker_kind=bad ;;
-    *) docker_state="NOT INSTALLED"; docker_kind=dim ;;
+    RUNNING) docker_state="Работает"; docker_kind=ok ;;
+    STOPPED) docker_state="Остановлен"; docker_kind=warn ;;
+    ERROR) docker_state="Ошибка"; docker_kind=bad ;;
+    *) docker_state="Не установлен"; docker_kind=dim ;;
   esac
 
   updates=$(count_updates 2>/dev/null || echo "?")
   if [[ $updates =~ ^[0-9]+$ ]] && (( updates > 0 )); then update_kind=warn; else update_kind=ok; fi
-  [[ -f /var/run/reboot-required ]] && { reboot="REQUIRED"; reboot_kind=warn; } || { reboot="NO"; reboot_kind=ok; }
+  [[ -f /var/run/reboot-required ]] && { reboot="Требуется"; reboot_kind=warn; } || { reboot="Не требуется"; reboot_kind=ok; }
 
   ui_top "SERVER-KIT" "v$SERVERKIT_VERSION"
   ui_blank
-  ui_section "SYSTEM STATUS"
+  ui_section "СОСТОЯНИЕ СИСТЕМЫ"
   ui_blank
   ui_two "$(ui_status SSH "$ssh_state" "$ssh_kind")" "$(ui_status UFW "$ufw_state" "$ufw_kind")"
   ui_two "$(ui_status Fail2ban "$f2b_state" "$f2b_kind")" "$(ui_status Docker "$docker_state" "$docker_kind")"
-  ui_two "$(ui_status Updates "$updates available" "$update_kind")" "$(ui_status Reboot "$reboot" "$reboot_kind")"
+  ui_two "$(ui_status Обновления "Доступно: $updates" "$update_kind")" "$(ui_status Перезагрузка "$reboot" "$reboot_kind")"
   ui_blank
-  ui_section "MANAGEMENT"
+  ui_section "УПРАВЛЕНИЕ"
   ui_blank
   ui_two "[01] SSH" "[07] Docker"
   ui_two "[02] Межсетевой экран" "[08] Screen-сессии"
@@ -100,10 +100,10 @@ server_info() {
   ui_top "SERVER-KIT" "Информация"
   ui_blank
   ui_line "ОС: $(os_name)"
-  ui_line "Kernel: $(uname -r)"
+  ui_line "Ядро: $(uname -r)"
   ui_line "Архитектура: $(uname -m)"
-  ui_line "Hostname: $(hostname)"
-  ui_line "Uptime: $(uptime -p 2>/dev/null || true)"
+  ui_line "Имя сервера: $(hostname)"
+  ui_line "Время работы: $(uptime -p 2>/dev/null || true)"
   ui_line "RAM: $mem"
   ui_line "Диск /: $disk"
   ui_line "IPv4: ${ipv4:-не найден}"
@@ -111,7 +111,7 @@ server_info() {
   ui_line "UFW: $ufw_state"
   ui_line "Fail2ban: $f2b_state"
   ui_line "Docker: $docker_state"
-  ui_line "Timezone: $(timedatectl show -p Timezone --value 2>/dev/null || true)"
+  ui_line "Часовой пояс: $(timedatectl show -p Timezone --value 2>/dev/null || true)"
   ui_bottom
   pause
 }
@@ -132,7 +132,7 @@ settings_menu() {
     ui_line "[00] Назад"
     ui_bottom
     printf '\n'
-    ask_num "serverkit › "; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01) if serverkit_check_update; then warn "Доступно обновление"; fi; pause ;;
       2|02) serverkit_update; pause ;;
@@ -151,7 +151,7 @@ main_menu() {
     header
     main_dashboard
     printf '\n'
-    ask_num "serverkit › "; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01) ssh_menu ;;
       2|02) firewall_menu ;;

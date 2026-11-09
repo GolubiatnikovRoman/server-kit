@@ -14,7 +14,7 @@ monitoring_menu() {
     command_exists btop && btop_label="btop" || btop_label="Установить btop"
     command_exists htop && htop_label="htop" || htop_label="Установить htop"
 
-    ui_top "MONITORING" "system"
+    ui_top "МОНИТОРИНГ" "Система"
     ui_blank
     ui_line "[01] Общая информация"
     ui_line "[02] Диски"
@@ -32,7 +32,7 @@ monitoring_menu() {
     ui_bottom
 
     printf '\n'
-    ask_num "monitoring › "; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01) show_overview; pause ;;
       2|02) df -hT -x tmpfs -x devtmpfs; pause ;;

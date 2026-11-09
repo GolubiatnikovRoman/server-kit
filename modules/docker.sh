@@ -77,7 +77,7 @@ docker_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "docker › "; c=$REPLY
+      ask_num "Выберите пункт: "; c=$REPLY
       case $c in
         1|01) install_docker; pause ;;
         0|00|"") return ;;
@@ -89,7 +89,7 @@ docker_menu() {
     version=$(docker --version 2>/dev/null | sed 's/,.*//' || echo "Docker")
 
     if [[ $state == "STOPPED" ]]; then
-      ui_top "DOCKER" "STOPPED"
+      ui_top "DOCKER" "Остановлен"
       ui_blank
       ui_line "$version"
       ui_blank
@@ -98,7 +98,7 @@ docker_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "docker › "; c=$REPLY
+      ask_num "Выберите пункт: "; c=$REPLY
       case $c in
         1|01) systemctl enable --now docker && ok "Docker запущен"; pause ;;
         2|02) journalctl -u docker -n 120 --no-pager; pause ;;
@@ -109,7 +109,7 @@ docker_menu() {
     fi
 
     if [[ $state == "ERROR" ]]; then
-      ui_top "DOCKER" "ERROR"
+      ui_top "DOCKER" "Ошибка"
       ui_blank
       ui_line "$version"
       ui_line "Служба активна, но Docker daemon не отвечает"
@@ -119,7 +119,7 @@ docker_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "docker › "; c=$REPLY
+      ask_num "Выберите пункт: "; c=$REPLY
       case $c in
         1|01) confirm "Перезапустить Docker?" && systemctl restart docker; pause ;;
         2|02) journalctl -u docker -n 120 --no-pager; pause ;;
@@ -130,25 +130,25 @@ docker_menu() {
     fi
 
     read -r running total images <<<"$(docker_counts)"
-    ui_top "DOCKER" "RUNNING"
+    ui_top "DOCKER" "Работает"
     ui_blank
     ui_line "$version"
-    ui_two "Containers: $running running / $total total" "Images: $images"
+    ui_two "Контейнеры: $running из $total работают" "Образы: $images"
     ui_blank
-    ui_section "ACTIONS"
+    ui_section "ДЕЙСТВИЯ"
     ui_blank
-    ui_two "[01] Все контейнеры" "[07] Stats"
-    ui_two "[02] Запущенные" "[08] Images"
-    ui_two "[03] Запустить контейнер" "[09] Compose version"
+    ui_two "[01] Все контейнеры" "[07] Статистика"
+    ui_two "[02] Запущенные" "[08] Образы"
+    ui_two "[03] Запустить контейнер" "[09] Версия Compose"
     ui_two "[04] Остановить контейнер" "[10] Использование диска"
     ui_two "[05] Перезапустить контейнер" "[11] Безопасная очистка"
-    ui_two "[06] Логи контейнера" "[12] Restart Docker"
+    ui_two "[06] Логи контейнера" "[12] Перезапустить Docker"
     ui_blank
     ui_line "[00] Назад"
     ui_bottom
 
     printf '\n'
-    ask_num "docker › "; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01) docker ps -a; pause ;;
       2|02) docker ps; pause ;;
