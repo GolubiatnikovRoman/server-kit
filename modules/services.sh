@@ -11,7 +11,7 @@ services_menu() {
   local c
   while true; do
     header
-    ui_top "SERVICES" "systemd"
+    ui_top "СЛУЖБЫ" "systemd"
     ui_blank
     ui_line "[01] Активные службы"
     ui_line "[02] Все службы"
@@ -27,7 +27,7 @@ services_menu() {
     ui_line "[00] Назад"
     ui_bottom
     printf '\n'
-    ask_num "services › "; c=$REPLY
+    ask_num "Выберите пункт: ; c=$REPLY
     case $c in
       1|01) systemctl --type=service --state=running --no-pager; pause ;;
       2|02) systemctl list-units --type=service --all --no-pager; pause ;;
