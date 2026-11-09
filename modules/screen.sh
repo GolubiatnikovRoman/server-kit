@@ -12,7 +12,7 @@ screen_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "screen › "; c=$REPLY
+      ask_num "Выберите пункт: ; c=$REPLY
       case $c in
         1|01) confirm "Установить Screen?" && apt-get update && apt-get install -y screen; pause ;;
         0|00|"") return ;;
@@ -21,7 +21,7 @@ screen_menu() {
       continue
     fi
 
-    ui_top "SCREEN" "sessions"
+    ui_top "SCREEN" "Сеансы"
     ui_blank
     ui_line "[01] Создать фоновую сессию"
     ui_line "[02] Создать и сразу подключиться"
@@ -33,7 +33,7 @@ screen_menu() {
     printf '\n'
     screen -ls || true
     printf '\n'
-    ask_num "screen › "; c=$REPLY
+    ask_num "Выберите пункт: ; c=$REPLY
     case $c in
       1|01) read -r -p 'Имя сессии: ' n; safe_name "$n" && screen -dmS "$n" && ok "Сессия $n создана" || err "Не удалось создать сессию"; pause ;;
       2|02) read -r -p 'Имя сессии: ' n; safe_name "$n" && screen -S "$n" ;;
