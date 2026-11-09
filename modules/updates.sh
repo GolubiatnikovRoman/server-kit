@@ -29,12 +29,12 @@ updates_menu() {
     [[ -f /var/run/reboot-required ]] && reboot="требуется" || reboot="не требуется"
     if security_updates_enabled 2>/dev/null; then auto="включены"; else auto="выключены"; fi
 
-    ui_top "UPDATES" "APT"
+    ui_top "ОБНОВЛЕНИЯ" "APT"
     ui_blank
-    ui_two "Доступно: $updates" "Reboot: $reboot"
-    ui_line "Security updates: $auto"
+    ui_two "Доступно: $updates" "Перезагрузка: $reboot"
+    ui_line "Обновления безопасности: $auto"
     ui_blank
-    ui_section "ACTIONS"
+    ui_section "ДЕЙСТВИЯ"
     ui_blank
     ui_line "[01] Обновить список пакетов"
     ui_line "[02] Показать доступные обновления"
@@ -51,7 +51,7 @@ updates_menu() {
     ui_bottom
 
     printf '\n'
-    ask_num "updates › "; c=$REPLY
+    ask_num "Выберите пункт: ; c=$REPLY
     case $c in
       1|01) apt-get update; rm -f "$SERVERKIT_STATE_DIR/update-count.cache"; pause ;;
       2|02) apt list --upgradable 2>/dev/null; pause ;;
