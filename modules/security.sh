@@ -69,7 +69,7 @@ security_menu() {
       ui_line "[00] Назад"
       ui_bottom
       printf '\n'
-      ask_num "Выберите пункт: ; c=$REPLY
+      ask_num "Выберите пункт: "; c=$REPLY
       case $c in
         1|01) install_fail2ban; pause ;;
         2|02) if security_updates_enabled; then echo "Нет такого пункта."; else enable_unattended_upgrades; pause; fi ;;
@@ -109,7 +109,7 @@ security_menu() {
     ui_line "[00] Назад"
     ui_bottom
     printf '\n'
-    ask_num "Выберите пункт: ; c=$REPLY
+    ask_num "Выберите пункт: "; c=$REPLY
     case $c in
       1|01)
         if systemctl is-active --quiet fail2ban 2>/dev/null; then fail2ban-client status 2>/dev/null || err "Fail2ban недоступен"
