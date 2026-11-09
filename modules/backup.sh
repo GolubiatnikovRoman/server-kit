@@ -45,7 +45,7 @@ backup_menu() {
     ufw_bak=$(latest_backup_dir firewall || true)
     f2b_bak=$(latest_backup_dir fail2ban || true)
 
-    ui_top "BACKUPS" "$SERVERKIT_BACKUP_DIR"
+    ui_top "РЕЗЕРВНЫЕ КОПИИ" "$SERVERKIT_BACKUP_DIR"
     ui_blank
     ui_line "[01] Создать полную копию настроек"
     ui_line "[02] Создать копию SSH"
@@ -62,7 +62,7 @@ backup_menu() {
     ui_bottom
 
     printf '\n'
-    ask_num "backup › "; c=$REPLY
+    ask_num "Выберите пункт: ; c=$REPLY
     case $c in
       1|01) create_system_backup; pause ;;
       2|02) backup_file /etc/ssh ssh; pause ;;
