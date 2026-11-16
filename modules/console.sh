@@ -10,23 +10,24 @@ ubuntu_motd_scripts() {
     [[ -f $f ]] || continue
     name=$(basename "$f")
     case "$name" in
-      00-header|10-help-text|50-motd-news|80-esm|80-esm-updates|80-livepatch|90-updates-available|91-contract-ua-esm-status|91-release-upgrade|92-unattended-upgrades|95-hwe-eol|98-fsck-at-reboot|98-reboot-required) printf '%s\n' "$f" ;;
+      00-header|10-help-text|50-landscape-sysinfo|50-motd-news|80-esm|80-esm-updates|80-livepatch|90-updates-available|91-contract-ua-esm-status|91-release-upgrade|92-unattended-upgrades|95-hwe-eol|98-fsck-at-reboot|98-reboot-required) printf '%s\n' "$f" ;;
     esac
   done
 }
 
 disable_ubuntu_motd() {
-  [[ ! -f $UBUNTU_MOTD_STATE ]] || { warn "Настройки Ubuntu MOTD уже сохранены"; return 0; }
   confirm "Скрыть стандартную сводку Ubuntu при SSH-входе?" || return 0
   local f mode
-  mkdir -p /var/lib/serverkit
-  : > "$UBUNTU_MOTD_STATE"
-  chmod 600 "$UBUNTU_MOTD_STATE"
+  mkdir -p /var/lib/serverkit || return 1
+  (umask 077; touch "$UBUNTU_MOTD_STATE") || return 1
+  chmod 600 "$UBUNTU_MOTD_STATE" || return 1
   while IFS= read -r f; do
     [[ -x $f ]] || continue
-    mode=$(stat -c %a "$f") || continue
-    printf '%s %s\n' "$mode" "$f" >> "$UBUNTU_MOTD_STATE"
-    chmod a-x "$f"
+    if ! awk -v path="$f" '$2 == path { found = 1 } END { exit !found }' "$UBUNTU_MOTD_STATE"; then
+      mode=$(stat -c %a "$f") || return 1
+      printf '%s %s\n' "$mode" "$f" >> "$UBUNTU_MOTD_STATE" || return 1
+    fi
+    chmod a-x "$f" || return 1
   done < <(ubuntu_motd_scripts)
   ok "Стандартные скрипты Ubuntu MOTD скрыты; SERVER-KIT сохранён"
 }
