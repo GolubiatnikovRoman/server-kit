@@ -73,8 +73,8 @@ docker_menu() {
       ui_blank
       ui_line "Docker Engine, CLI, containerd, Buildx и Compose"
       ui_blank
-      ui_line "[01] Установить Docker"
-      ui_line "[00] Назад"
+      ui_line "[1] Установить Docker"
+      ui_line "[0] Назад"
       ui_bottom
       printf '\n'
       ask_num "Выберите пункт: "; c=$REPLY
@@ -93,9 +93,9 @@ docker_menu() {
       ui_blank
       ui_line "$version"
       ui_blank
-      ui_line "[01] Запустить Docker"
-      ui_line "[02] Показать журнал службы"
-      ui_line "[00] Назад"
+      ui_line "[1] Запустить Docker"
+      ui_line "[2] Показать журнал службы"
+      ui_line "[0] Назад"
       ui_bottom
       printf '\n'
       ask_num "Выберите пункт: "; c=$REPLY
@@ -114,9 +114,9 @@ docker_menu() {
       ui_line "$version"
       ui_line "Служба активна, но Docker daemon не отвечает"
       ui_blank
-      ui_line "[01] Перезапустить Docker"
-      ui_line "[02] Показать журнал службы"
-      ui_line "[00] Назад"
+      ui_line "[1] Перезапустить Docker"
+      ui_line "[2] Показать журнал службы"
+      ui_line "[0] Назад"
       ui_bottom
       printf '\n'
       ask_num "Выберите пункт: "; c=$REPLY
@@ -137,14 +137,14 @@ docker_menu() {
     ui_blank
     ui_section "ДЕЙСТВИЯ"
     ui_blank
-    ui_two "[01] Все контейнеры" "[07] Статистика"
-    ui_two "[02] Запущенные" "[08] Образы"
-    ui_two "[03] Запустить контейнер" "[09] Версия Compose"
-    ui_two "[04] Остановить контейнер" "[10] Использование диска"
-    ui_two "[05] Перезапустить контейнер" "[11] Безопасная очистка"
-    ui_two "[06] Логи контейнера" "[12] Перезапустить Docker"
+    ui_two "[1] Все контейнеры" "[7] Статистика"
+    ui_two "[2] Запущенные" "[8] Образы"
+    ui_two "[3] Запустить контейнер" "[9] Версия Compose"
+    ui_two "[4] Остановить контейнер" "[10] Использование диска"
+    ui_two "[5] Перезапустить контейнер" "[11] Безопасная очистка"
+    ui_two "[6] Логи контейнера" "[12] Перезапустить Docker"
     ui_blank
-    ui_line "[00] Назад"
+    ui_line "[0] Назад"
     ui_bottom
 
     printf '\n'

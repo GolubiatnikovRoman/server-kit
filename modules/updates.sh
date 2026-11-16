@@ -36,18 +36,18 @@ updates_menu() {
     ui_blank
     ui_section "ДЕЙСТВИЯ"
     ui_blank
-    ui_line "[01] Обновить список пакетов"
-    ui_line "[02] Показать доступные обновления"
+    ui_line "[1] Обновить список пакетов"
+    ui_line "[2] Показать доступные обновления"
     if [[ $updates =~ ^[0-9]+$ ]] && (( updates > 0 )); then
-      ui_line "[03] Установить обычные обновления"
-      ui_line "[04] Полное обновление (full-upgrade)"
+      ui_line "[3] Установить обычные обновления"
+      ui_line "[4] Полное обновление (full-upgrade)"
     fi
     if ! security_updates_enabled 2>/dev/null; then
-      ui_line "[05] Включить автоматические security-обновления"
+      ui_line "[5] Включить автоматические security-обновления"
     fi
-    ui_line "[06] Проверить необходимость перезагрузки"
-    if [[ -f /var/run/reboot-required ]]; then ui_line "[07] Перезагрузить сервер"; fi
-    ui_line "[00] Назад"
+    ui_line "[6] Проверить необходимость перезагрузки"
+    if [[ -f /var/run/reboot-required ]]; then ui_line "[7] Перезагрузить сервер"; fi
+    ui_line "[0] Назад"
     ui_bottom
 
     printf '\n'

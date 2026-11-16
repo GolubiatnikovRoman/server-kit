@@ -8,8 +8,8 @@ screen_menu() {
     if ! command_exists screen; then
       ui_top "SCREEN" "не установлен"
       ui_blank
-      ui_line "[01] Установить Screen"
-      ui_line "[00] Назад"
+      ui_line "[1] Установить Screen"
+      ui_line "[0] Назад"
       ui_bottom
       printf '\n'
       ask_num "Выберите пункт: "; c=$REPLY
@@ -23,12 +23,12 @@ screen_menu() {
 
     ui_top "SCREEN" "Сеансы"
     ui_blank
-    ui_line "[01] Создать фоновую сессию"
-    ui_line "[02] Создать и сразу подключиться"
-    ui_line "[03] Подключиться к сессии"
-    ui_line "[04] Переподключиться к занятой сессии"
-    ui_line "[05] Завершить сессию"
-    ui_line "[00] Назад"
+    ui_line "[1] Создать фоновую сессию"
+    ui_line "[2] Создать и сразу подключиться"
+    ui_line "[3] Подключиться к сессии"
+    ui_line "[4] Переподключиться к занятой сессии"
+    ui_line "[5] Завершить сессию"
+    ui_line "[0] Назад"
     ui_bottom
     printf '\n'
     screen -ls || true

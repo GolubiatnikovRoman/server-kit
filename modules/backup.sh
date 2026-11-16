@@ -47,18 +47,18 @@ backup_menu() {
 
     ui_top "РЕЗЕРВНЫЕ КОПИИ" "$SERVERKIT_BACKUP_DIR"
     ui_blank
-    ui_line "[01] Создать полную копию настроек"
-    ui_line "[02] Создать копию SSH"
-    if [[ -d /etc/ufw ]]; then ui_line "[03] Создать копию UFW"; fi
-    if [[ -d /etc/fail2ban ]]; then ui_line "[04] Создать копию Fail2ban"; fi
+    ui_line "[1] Создать полную копию настроек"
+    ui_line "[2] Создать копию SSH"
+    if [[ -d /etc/ufw ]]; then ui_line "[3] Создать копию UFW"; fi
+    if [[ -d /etc/fail2ban ]]; then ui_line "[4] Создать копию Fail2ban"; fi
     ui_blank
-    ui_line "[05] Показать резервные копии"
+    ui_line "[5] Показать резервные копии"
     ui_blank
-    [[ -n $ssh_bak ]] && ui_line "[06] Восстановить последнюю копию SSH"
-    [[ -n $ufw_bak ]] && ui_line "[07] Восстановить последнюю копию UFW"
-    [[ -n $f2b_bak ]] && ui_line "[08] Восстановить последнюю копию Fail2ban"
-    ui_line "[09] Удалить выбранную копию"
-    ui_line "[00] Назад"
+    [[ -n $ssh_bak ]] && ui_line "[6] Восстановить последнюю копию SSH"
+    [[ -n $ufw_bak ]] && ui_line "[7] Восстановить последнюю копию UFW"
+    [[ -n $f2b_bak ]] && ui_line "[8] Восстановить последнюю копию Fail2ban"
+    ui_line "[9] Удалить выбранную копию"
+    ui_line "[0] Назад"
     ui_bottom
 
     printf '\n'
