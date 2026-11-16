@@ -16,19 +16,19 @@ monitoring_menu() {
 
     ui_top "МОНИТОРИНГ" "Система"
     ui_blank
-    ui_line "[01] Общая информация"
-    ui_line "[02] Диски"
-    ui_line "[03] Память и Swap"
-    ui_line "[04] Процессы по памяти"
-    ui_line "[05] Процессы по CPU"
+    ui_line "[1] Общая информация"
+    ui_line "[2] Диски"
+    ui_line "[3] Память и Swap"
+    ui_line "[4] Процессы по памяти"
+    ui_line "[5] Процессы по CPU"
     ui_blank
-    ui_line "[06] Открытые порты"
-    ui_line "[07] Активные TCP-соединения"
-    ui_line "[08] Сетевые интерфейсы"
+    ui_line "[6] Открытые порты"
+    ui_line "[7] Активные TCP-соединения"
+    ui_line "[8] Сетевые интерфейсы"
     ui_blank
-    ui_line "[09] $btop_label"
+    ui_line "[9] $btop_label"
     ui_line "[10] $htop_label"
-    ui_line "[00] Назад"
+    ui_line "[0] Назад"
     ui_bottom
 
     printf '\n'

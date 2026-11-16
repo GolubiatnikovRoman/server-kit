@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/GolubiatnikovRoman/server-kit"><img src="https://img.shields.io/badge/SERVER--KIT-v1.2.2-93E06F?labelColor=221B17" alt="Версия"></a>
+  <a href="https://github.com/GolubiatnikovRoman/server-kit"><img src="https://img.shields.io/badge/SERVER--KIT-v1.2.3-93E06F?labelColor=221B17" alt="Версия"></a>
   <a href="https://ubuntu.com/"><img src="https://img.shields.io/badge/Ubuntu-supported-93E06F?labelColor=221B17" alt="Ubuntu"></a>
   <a href="https://www.debian.org/"><img src="https://img.shields.io/badge/Debian-supported-93E06F?labelColor=221B17" alt="Debian"></a>
   <a href="https://github.com/GolubiatnikovRoman/server-kit/stargazers"><img src="https://img.shields.io/github/stars/GolubiatnikovRoman/server-kit?style=flat&label=Stars&color=93E06F&labelColor=221B17" alt="Stars"></a>
@@ -41,6 +41,7 @@
 - 🖥️ **Screen.** Создание, подключение, переподключение и завершение сессий.
 - 💾 **Резервные копии.** Backup SSH, UFW, Fail2ban и системных настроек.
 - 🩺 **Диагностика.** Проверка SSH, DNS, HTTPS, дисков, служб, портов и базовых проблем безопасности.
+- 🖥️ **Имя сервера.** Смена системного hostname из меню «Информация о сервере».
 - ✨ **Консоль.** Динамический MOTD с основной информацией о сервере.
 - ⬆️ **Обновление SERVER-KIT.** Проверка версии и обновление через GitHub Releases.
 
@@ -90,6 +91,17 @@ ssh root@SERVER_IP -p 42137
 
 > [!NOTE]
 > Если у хостинг-провайдера используется отдельный firewall / security group, новый порт нужно разрешить и там вручную.
+
+## Смена имени сервера
+
+Запустите `serverkit` и выберите **12. Информация о сервере → 1. Сменить имя сервера**.
+Введите короткое имя, например `vpn-nl-01`, и подтвердите изменение. SERVER-KIT сохранит копии
+`/etc/hostname` и `/etc/hosts`, обновит системное имя и локальную запись в `/etc/hosts`.
+Откройте новую SSH-сессию, чтобы увидеть новое имя в приглашении терминала.
+
+Если образ VPS управляет `/etc/hosts` через cloud-init, после перезагрузки этот файл может быть
+перегенерирован. Параметр [`manage_etc_hosts`](https://docs.cloud-init.io/en/latest/reference/yaml_examples/update_etc_hosts.html)
+задаётся в конфигурации образа.
 
 ## Docker
 

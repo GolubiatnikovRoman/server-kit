@@ -18,6 +18,7 @@ source "$ROOT_DIR/modules/screen.sh"
 source "$ROOT_DIR/modules/backup.sh"
 source "$ROOT_DIR/modules/diagnostics.sh"
 source "$ROOT_DIR/modules/console.sh"
+source "$ROOT_DIR/modules/hostname.sh"
 
 require_root
 supported_os || { err "Поддерживаются Ubuntu и Debian."; exit 1; }
@@ -73,17 +74,17 @@ main_dashboard() {
   ui_blank
   ui_section "УПРАВЛЕНИЕ"
   ui_blank
-  ui_two "[01] SSH" "[07] Docker"
-  ui_two "[02] Межсетевой экран" "[08] Screen-сессии"
-  ui_two "[03] Безопасность" "[09] Резервные копии"
-  ui_two "[04] Обновления" "[10] Диагностика"
-  ui_two "[05] Мониторинг" "[11] Оформление консоли"
-  ui_two "[06] Службы" "[12] Информация о сервере"
+  ui_two "[1] SSH" "[7] Docker"
+  ui_two "[2] Межсетевой экран" "[8] Screen-сессии"
+  ui_two "[3] Безопасность" "[9] Резервные копии"
+  ui_two "[4] Обновления" "[10] Диагностика"
+  ui_two "[5] Мониторинг" "[11] Оформление консоли"
+  ui_two "[6] Службы" "[12] Информация о сервере"
   ui_blank
   ui_two "" "[13] Настройки SERVER-KIT"
   ui_blank
   ui_sep
-  ui_line "[00] Выход"
+  ui_line "[0] Выход"
   ui_bottom
 }
 
@@ -112,8 +113,25 @@ server_info() {
   ui_line "Fail2ban: $f2b_state"
   ui_line "Docker: $docker_state"
   ui_line "Часовой пояс: $(timedatectl show -p Timezone --value 2>/dev/null || true)"
+  ui_blank
+  ui_line "[1] Сменить имя сервера"
+  ui_line "[0] Назад"
   ui_bottom
-  pause
+}
+
+server_info_menu() {
+  local c
+  while true; do
+    server_info
+    printf '\n'
+    ask_num "Выберите пункт: " || return 0
+    c=$REPLY
+    case $c in
+      1|01) change_server_hostname || true; pause ;;
+      0|00|"") return ;;
+      *) echo "Нет такого пункта." ;;
+    esac
+  done
 }
 
 settings_menu() {
@@ -122,14 +140,14 @@ settings_menu() {
     header
     ui_top "SERVER-KIT" "Настройки"
     ui_blank
-    ui_line "[01] Проверить обновления"
-    ui_line "[02] Обновить SERVER-KIT"
-    ui_line "[03] Показать CHANGELOG"
-    ui_line "[04] Показать версию"
+    ui_line "[1] Проверить обновления"
+    ui_line "[2] Обновить SERVER-KIT"
+    ui_line "[3] Показать CHANGELOG"
+    ui_line "[4] Показать версию"
     ui_blank
-    ui_line "[05] Удалить SERVER-KIT"
+    ui_line "[5] Удалить SERVER-KIT"
     ui_blank
-    ui_line "[00] Назад"
+    ui_line "[0] Назад"
     ui_bottom
     printf '\n'
     ask_num "Выберите пункт: "; c=$REPLY
@@ -164,7 +182,7 @@ main_menu() {
       9|09) backup_menu ;;
       10) diagnostics_menu ;;
       11) console_menu ;;
-      12) server_info ;;
+      12) server_info_menu ;;
       13) settings_menu ;;
       0|00|"") exit 0 ;;
       *) echo "Нет такого пункта." ;;

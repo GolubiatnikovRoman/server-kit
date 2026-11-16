@@ -59,14 +59,14 @@ security_menu() {
       ui_blank
       ui_line "Fail2ban не установлен"
       ui_blank
-      ui_line "[01] Установить и включить Fail2ban"
+      ui_line "[1] Установить и включить Fail2ban"
       if ! security_updates_enabled; then
-        ui_line "[02] Включить обновления безопасности"
+        ui_line "[2] Включить обновления безопасности"
       else
         ui_line "Обновления безопасности: включены"
       fi
-      ui_line "[03] Базовая проверка безопасности"
-      ui_line "[00] Назад"
+      ui_line "[3] Базовая проверка безопасности"
+      ui_line "[0] Назад"
       ui_bottom
       printf '\n'
       ask_num "Выберите пункт: "; c=$REPLY
@@ -94,19 +94,19 @@ security_menu() {
     ui_blank
 
     if ! systemctl is-active --quiet fail2ban 2>/dev/null; then
-      ui_line "[01] Запустить Fail2ban"
+      ui_line "[1] Запустить Fail2ban"
     else
-      ui_line "[01] Статус Fail2ban"
+      ui_line "[1] Статус Fail2ban"
     fi
-    ui_line "[02] Статус защиты SSH"
-    ui_line "[03] Разблокировать IP"
-    ui_line "[04] Последние неудачные SSH-входы"
+    ui_line "[2] Статус защиты SSH"
+    ui_line "[3] Разблокировать IP"
+    ui_line "[4] Последние неудачные SSH-входы"
     ui_blank
     if ! security_updates_enabled; then
-      ui_line "[05] Включить обновления безопасности"
+      ui_line "[5] Включить обновления безопасности"
     fi
-    ui_line "[06] Базовая проверка безопасности"
-    ui_line "[00] Назад"
+    ui_line "[6] Базовая проверка безопасности"
+    ui_line "[0] Назад"
     ui_bottom
     printf '\n'
     ask_num "Выберите пункт: "; c=$REPLY

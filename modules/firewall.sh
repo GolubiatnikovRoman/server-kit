@@ -65,8 +65,8 @@ firewall_menu() {
       ui_blank
       ui_line "UFW не установлен"
       ui_blank
-      ui_line "[01] Установить UFW"
-      ui_line "[00] Назад"
+      ui_line "[1] Установить UFW"
+      ui_line "[0] Назад"
       ui_bottom
       printf '\n'
       ask_num "Выберите пункт: "; c=$REPLY
@@ -89,17 +89,17 @@ firewall_menu() {
     fi
     ui_blank
     if ufw_active; then
-      ui_line "[01] Отключить UFW"
+      ui_line "[1] Отключить UFW"
     else
-      ui_line "[01] Включить UFW безопасно"
+      ui_line "[1] Включить UFW безопасно"
     fi
-    ui_line "[02] Открыть порт"
-    ui_line "[03] Закрыть порт"
-    ui_line "[04] Разрешить IP/подсеть"
+    ui_line "[2] Открыть порт"
+    ui_line "[3] Закрыть порт"
+    ui_line "[4] Разрешить IP/подсеть"
     ui_blank
-    ui_line "[05] Показать правила"
-    ui_line "[06] Удалить правило по номеру"
-    ui_line "[00] Назад"
+    ui_line "[5] Показать правила"
+    ui_line "[6] Удалить правило по номеру"
+    ui_line "[0] Назад"
     ui_bottom
 
     printf '\n'

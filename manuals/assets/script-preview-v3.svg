@@ -27,16 +27,16 @@
       font-size="20" font-weight="800" fill="#67E8F9">МОДУЛИ</text>
 
     <g font-family="'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="23" font-weight="600">
-      <text x="34" y="110" fill="#22D3EE">01</text><text x="102" y="110" fill="#E2E8F0">SSH</text>
-      <text x="34" y="158" fill="#22D3EE">02</text><text x="102" y="158" fill="#E2E8F0">Межсетевой экран</text>
-      <text x="34" y="206" fill="#22D3EE">03</text><text x="102" y="206" fill="#E2E8F0">Безопасность</text>
-      <text x="34" y="254" fill="#22D3EE">04</text><text x="102" y="254" fill="#E2E8F0">Обновления системы</text>
-      <text x="34" y="302" fill="#22D3EE">05</text><text x="102" y="302" fill="#E2E8F0">Мониторинг</text>
-      <text x="34" y="350" fill="#22D3EE">06</text><text x="102" y="350" fill="#E2E8F0">Службы</text>
+      <text x="34" y="110" fill="#22D3EE">1</text><text x="102" y="110" fill="#E2E8F0">SSH</text>
+      <text x="34" y="158" fill="#22D3EE">2</text><text x="102" y="158" fill="#E2E8F0">Межсетевой экран</text>
+      <text x="34" y="206" fill="#22D3EE">3</text><text x="102" y="206" fill="#E2E8F0">Безопасность</text>
+      <text x="34" y="254" fill="#22D3EE">4</text><text x="102" y="254" fill="#E2E8F0">Обновления системы</text>
+      <text x="34" y="302" fill="#22D3EE">5</text><text x="102" y="302" fill="#E2E8F0">Мониторинг</text>
+      <text x="34" y="350" fill="#22D3EE">6</text><text x="102" y="350" fill="#E2E8F0">Службы</text>
 
-      <text x="560" y="110" fill="#22D3EE">07</text><text x="628" y="110" fill="#E2E8F0">Docker</text>
-      <text x="560" y="158" fill="#22D3EE">08</text><text x="628" y="158" fill="#E2E8F0">Screen-сессии</text>
-      <text x="560" y="206" fill="#22D3EE">09</text><text x="628" y="206" fill="#E2E8F0">Резервные копии</text>
+      <text x="560" y="110" fill="#22D3EE">7</text><text x="628" y="110" fill="#E2E8F0">Docker</text>
+      <text x="560" y="158" fill="#22D3EE">8</text><text x="628" y="158" fill="#E2E8F0">Screen-сессии</text>
+      <text x="560" y="206" fill="#22D3EE">9</text><text x="628" y="206" fill="#E2E8F0">Резервные копии</text>
       <text x="560" y="254" fill="#22D3EE">10</text><text x="628" y="254" fill="#E2E8F0">Диагностика</text>
       <text x="560" y="302" fill="#22D3EE">11</text><text x="628" y="302" fill="#E2E8F0">Оформление консоли</text>
       <text x="560" y="350" fill="#22D3EE">12</text><text x="628" y="350" fill="#E2E8F0">Информация о сервере</text>

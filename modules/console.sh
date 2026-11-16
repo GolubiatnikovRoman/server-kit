@@ -77,12 +77,12 @@ console_menu() {
     if [[ -x $MOTD_FILE ]]; then
       ui_top "ОФОРМЛЕНИЕ КОНСОЛИ" "MOTD включён"
       ui_blank
-      ui_line "[01] Обновить MOTD SERVER-KIT"
-      ui_line "[02] Предпросмотр MOTD"
-      ui_line "[03] Отключить MOTD SERVER-KIT"
-      ui_line "[04] Скрыть сводку Ubuntu"
-      ui_line "[05] Восстановить сводку Ubuntu"
-      ui_line "[00] Назад"
+      ui_line "[1] Обновить MOTD SERVER-KIT"
+      ui_line "[2] Предпросмотр MOTD"
+      ui_line "[3] Отключить MOTD SERVER-KIT"
+      ui_line "[4] Скрыть сводку Ubuntu"
+      ui_line "[5] Восстановить сводку Ubuntu"
+      ui_line "[0] Назад"
       ui_bottom
       printf '\n'
       ask_num "Выберите пункт: "; c=$REPLY
@@ -98,8 +98,8 @@ console_menu() {
     else
       ui_top "ОФОРМЛЕНИЕ КОНСОЛИ" "MOTD выключен"
       ui_blank
-      ui_line "[01] Установить MOTD SERVER-KIT"
-      ui_line "[00] Назад"
+      ui_line "[1] Установить MOTD SERVER-KIT"
+      ui_line "[0] Назад"
       ui_bottom
       printf '\n'
       ask_num "Выберите пункт: "; c=$REPLY

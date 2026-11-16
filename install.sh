@@ -40,7 +40,7 @@ trap 'rm -rf "$TMP"' EXIT
 files=(VERSION CHANGELOG.md serverkit.sh lib/ui.sh lib/common.sh lib/updater.sh \
   modules/ssh.sh modules/firewall.sh modules/security.sh modules/updates.sh \
   modules/monitoring.sh modules/services.sh modules/docker.sh modules/screen.sh \
-  modules/backup.sh modules/diagnostics.sh modules/console.sh)
+  modules/backup.sh modules/diagnostics.sh modules/console.sh modules/hostname.sh)
 
 printf 'SERVER-KIT — %s\n' "$( [[ $MODE == update ]] && echo обновление || echo установка )"
 printf 'Источник: %s @ %s\n\n' "$REPO" "$REF"
